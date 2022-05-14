@@ -19,7 +19,7 @@ export default class StringCondition {
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq, startsWith, endWith'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
