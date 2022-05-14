@@ -90,8 +90,8 @@ class FieldCondition {
     allowedTypes?: AllowedTypesCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition
+    objectCondition?: ObjectCondition
     // arrayCondition?: ArrayCondition
-    // objectCondition?: ObjectCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull) {
@@ -160,11 +160,11 @@ class FieldCondition {
                 return false
             }
             // string allowed
-            // no requirement on the string
+            // no required condition on the string
             if (!this.stringCondition) {
                 return true
             }
-            // requires something on the string
+            // has required condition on the string
             return this.stringCondition.check(fieldValue)
         }
         if (fieldType === 'number') {
@@ -173,12 +173,25 @@ class FieldCondition {
                 return false
             }
             // number allowed
-            // no requirement on the number
+            // no required condition on the number
             if (!this.numberCondition) {
                 return true
             }
-            // requires something on the number
+            // has required condition on the number
             return this.numberCondition.check(fieldValue)
+        }
+        if (fieldType === 'object') {
+            // not array
+            if (!Array.isArray(fieldValue)) {
+                // no required condition on the object
+                if (!this.objectCondition) {
+                    return true
+                }
+                // has required condition on the object
+                return this.objectCondition.check(fieldValue)
+            }
+            // array
+            throw `We do not support array yet`
         }
         throw `We do not support field type ${fieldType}`
     }
