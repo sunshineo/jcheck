@@ -1,4 +1,5 @@
 import objectNotArrayNotNull from "./utils"
+import NumberCondition from "./NumberCondition"
 
 export default class StringCondition {
     all?: StringCondition[]
@@ -6,6 +7,7 @@ export default class StringCondition {
     not?: StringCondition
 
     caseInsensitive: boolean = false
+    lengthCondition?: NumberCondition
     eq?: string
     neq?: string
 
@@ -15,7 +17,7 @@ export default class StringCondition {
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or eq'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -67,6 +69,15 @@ export default class StringCondition {
                 throw 'caseInsensitive must be a boolean'
             }
             this.caseInsensitive = caseInsensitiveValue
+        }
+
+        const lengthConditionValue = input['lengthCondition']
+        if (lengthConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            this.lengthCondition = new NumberCondition(lengthConditionValue)
+            oneConditionSpecified = true
         }
 
         const eqValue = input['eq']
@@ -124,6 +135,9 @@ export default class StringCondition {
             input = input.toLocaleLowerCase()
         }
 
+        if (this.lengthCondition) {
+            return this.lengthCondition.check(input.length)
+        }
         if (this.eq) {
             return input === this.eq
         }
