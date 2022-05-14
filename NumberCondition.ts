@@ -65,9 +65,6 @@ export default class NumberCondition {
 
         const eqValue = input['eq']
         if (eqValue !== undefined) {
-            console.log('===')
-            console.log(eqValue)
-            console.log('===')
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
