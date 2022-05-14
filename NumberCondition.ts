@@ -147,21 +147,21 @@ export default class NumberCondition {
         if (this.not) {
             return !this.not.check(input)
         }
-        if (this.eq) {
+        if (this.eq !== undefined) {
             return input === this.eq
         }
-        if (this.gt) {
+        if (this.gt !== undefined) {
             return input > this.gt
         }
-        if (this.gte) {
+        if (this.gte !== undefined) {
             return input >= this.gte
         }
-        if (this.lt) {
+        if (this.lt !== undefined) {
             return input < this.lt
         }
-        if (this.lte) {
+        if (this.lte !== undefined) {
             return input <= this.lte
         }
-        throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
+        throw 'NumberConditon does not contain anything. Constructor should have thrown but did not.'
     }
 }
