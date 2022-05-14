@@ -10,6 +10,8 @@ export default class StringCondition {
     lengthCondition?: NumberCondition
     eq?: string
     neq?: string
+    startsWith?: string
+    endsWith?: string
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -108,6 +110,34 @@ export default class StringCondition {
             }
             oneConditionSpecified = true
         }
+        const startsWithValue = input['startsWith']
+        if (startsWithValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof startsWithValue !== 'string') {
+                throw 'startsWith must be a string'
+            }
+            this.startsWith = startsWithValue
+            if (this.caseInsensitive) {
+                this.startsWith = startsWithValue.toLocaleLowerCase()
+            }
+            oneConditionSpecified = true
+        }
+        const endsWithValue = input['endsWith']
+        if (endsWithValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof endsWithValue !== 'string') {
+                throw 'endsWith must be a string'
+            }
+            this.endsWith = endsWithValue
+            if (this.caseInsensitive) {
+                this.endsWith = endsWithValue.toLocaleLowerCase()
+            }
+            oneConditionSpecified = true
+        }
         throw oneAndOnlyOneMsg
     }
     check(input: string): boolean {
@@ -143,6 +173,12 @@ export default class StringCondition {
         }
         if (this.neq) {
             return input !== this.neq
+        }
+        if (this.startsWith) {
+            return input.startsWith(this.startsWith)
+        }
+        if (this.endsWith) {
+            return input.endsWith(this.endsWith)
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
