@@ -1,3 +1,5 @@
+import FieldValueCondition from "./FieldValueCondition"
+import FilterArrayCondition from "./FilterArrayCondition"
 import NumberCondition from "./NumberCondition"
 import objectNotArrayNotNull from "./utils"
 
@@ -7,13 +9,16 @@ export default class ArrayCondition {
     not?: ArrayCondition
 
     sizeCondition?: NumberCondition
+    hasElementCondition?: FieldValueCondition
+    hasNoElementCondition?: FieldValueCondition
+    filterArrayCondition?: FilterArrayCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or sizeCondition'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, sizeCondition, hasElement, hasNoElement, filterArrayCondition'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -68,6 +73,33 @@ export default class ArrayCondition {
             oneConditionSpecified = true
         }
 
+        const hasElementConditionValue: any = input['hasElementCondition']
+        if (hasElementConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            this.hasElementCondition = new FieldValueCondition(hasElementConditionValue)
+            oneConditionSpecified = true
+        }
+
+        const hasNoElementConditionValue: any = input['hasNoElementCondition']
+        if (hasNoElementConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            this.hasNoElementCondition = new FieldValueCondition(hasNoElementConditionValue)
+            oneConditionSpecified = true
+        }
+
+        const filterArrayConditionValue: any = input['filterArrayCondition']
+        if (filterArrayConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            this.filterArrayCondition = new FilterArrayCondition(filterArrayConditionValue)
+            oneConditionSpecified = true
+        }
+
         if (!oneConditionSpecified) {
             throw oneAndOnlyOneMsg
         }
@@ -98,6 +130,28 @@ export default class ArrayCondition {
         if (this.sizeCondition) {
             const size: number = input.length
             return this.sizeCondition.check(size)
+        }
+
+        if (this.hasElementCondition) {
+            for (const element of input) {
+                if (this.hasElementCondition.check(element)) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        if (this.hasNoElementCondition) {
+            for (const element of input) {
+                if (this.hasNoElementCondition.check(element)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        if (this.filterArrayCondition) {
+            return this.filterArrayCondition.check(input)
         }
         throw 'ArrayCondition does not contain anything. Constructor should have thrown but did not.'
     }
