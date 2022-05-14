@@ -154,7 +154,9 @@ export default class StringCondition {
             }
             oneConditionSpecified = true
         }
-        throw oneAndOnlyOneMsg
+        if (!oneConditionSpecified) {
+            throw oneAndOnlyOneMsg
+        }
     }
     check(input: string): boolean {
         if (this.all) {
