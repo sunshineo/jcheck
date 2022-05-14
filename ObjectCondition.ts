@@ -1,21 +1,22 @@
 import objectNotArrayNotNull from "./utils"
 import FieldCondition from "./FieldCondition"
+import ArrayCondition from "./ArrayCondition"
 
 export default class ObjectCondition {
     all?: ObjectCondition[]
     any?: ObjectCondition[]
     not?: ObjectCondition
 
-    // keysCondition?: ArrayCondition
-    // valuesCondition?: ArrayCondition
     fieldCondition?: FieldCondition
+    keysCondition?: ArrayCondition
+    valuesCondition?: ArrayCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull) {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or valueCondition'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or fieldCondition, keysCondition, valuesCondition'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -69,6 +70,25 @@ export default class ObjectCondition {
             oneConditionSpecified = true
             this.fieldCondition = new FieldCondition(fieldConditionValue)
         }
+
+        const keysConditionValue: any = input['keysCondition']
+        if (keysConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            oneConditionSpecified = true
+            this.keysCondition = new ArrayCondition(keysConditionValue)
+        }
+
+        const valuesConditionValue: any = input['valuesCondition']
+        if (valuesConditionValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            oneConditionSpecified = true
+            this.valuesCondition = new ArrayCondition(valuesConditionValue)
+        }
+        
         if (!oneConditionSpecified) {
             throw oneAndOnlyOneMsg
         }
