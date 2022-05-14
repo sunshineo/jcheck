@@ -70,62 +70,56 @@ export default class FieldValueCondition implements ICondition {
     }
 
     check(fieldValue: any): boolean {
-        if (!objectNotArrayNotNull(fieldValue)) {
-            throw 'input must be an object not array and not null'
+        if (this.allowedType === 'null') {
+            return fieldValue === null
         }
-        const fieldType: string = typeof fieldValue
-        if (fieldType === 'boolean') {
-            // boolean not allowed
-            if (this.allowedTypes && !this.allowedTypes?.allowBoolean) {
+        if (this.allowedType === 'boolean') {
+            if (typeof fieldValue !== 'boolean') {
                 return false
             }
-            // boolean allowed
-            return fieldValue
+            if (!this.booleanCondition) {
+                return true
+            }
+            return this.booleanCondition.check(fieldValue)
         }
-        if (fieldType === 'string') {
-            // string not allowed
-            if (this.allowedTypes && !this.allowedTypes?.allowString) {
+        if (this.allowedType === 'string') {
+            if (typeof fieldValue !== 'string') {
                 return false
             }
-            // string allowed
-            // no required condition on the string
             if (!this.stringCondition) {
                 return true
             }
             // has required condition on the string
             return this.stringCondition.check(fieldValue)
         }
-        if (fieldType === 'number') {
-            // number not allowed
-            if (this.allowedTypes && !this.allowedTypes?.allowNumber) {
+        if (this.allowedType === 'number') {
+            if (typeof fieldValue !== 'number') {
                 return false
             }
-            // number allowed
-            // no required condition on the number
             if (!this.numberCondition) {
                 return true
             }
-            // has required condition on the number
             return this.numberCondition.check(fieldValue)
         }
-        if (fieldType === 'object') {
-            // not array
+        if (this.allowedType === 'array') {
             if (!Array.isArray(fieldValue)) {
-                // no required condition on the object
-                if (!this.objectCondition) {
-                    return true
-                }
-                // has required condition on the object
-                return this.objectCondition.check(fieldValue)
+                return false
             }
-            // array
-            // no required condition on the array
             if (!this.arrayCondition) {
                 return true
             }
-            // has required condition on the array
             return this.arrayCondition.check(fieldValue)
         }
-        throw `We do not support field type ${fieldType}`
+        if (this.allowedType === 'object') {
+            if (!objectNotArrayNotNull(fieldValue)) {
+                return false
+            }
+            if (!this.objectCondition) {
+                return true
+            }
+            // has required condition on the object
+            return this.objectCondition.check(fieldValue)
+        }
+        throw `Allowed type ${this.allowedType} is not one of the 6 valid JSON types: null, boolean, string, number, object, array. Constructor should have thrown but did not.`
     }
 }
