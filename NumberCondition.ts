@@ -6,13 +6,15 @@ export default class NumberCondition {
     not?: NumberCondition
 
     eq?: number
+    gt?: number
+
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or eq'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, eq, gt'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -69,6 +71,19 @@ export default class NumberCondition {
             this.eq = eqValue
             oneConditionSpecified = true
         }
+
+        const gtValue = input['gt']
+        if (gtValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof gtValue !== 'number') {
+                throw 'gt must be a Number'
+            }
+            this.gt = gtValue
+            oneConditionSpecified = true
+        }
+
         throw oneAndOnlyOneMsg
     }
     check(input: number): boolean {
@@ -93,6 +108,9 @@ export default class NumberCondition {
         }
         if (this.eq) {
             return input === this.eq
+        }
+        if (this.gt) {
+            return input > this.gt
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
