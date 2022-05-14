@@ -15,10 +15,11 @@ export default class ObjectCondition {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or valueCondition'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or valueCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(allArray)) {
@@ -36,7 +37,7 @@ export default class ObjectCondition {
         const anyArray: any = input['any']
         if (anyArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or valueCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(anyArray)) {
@@ -54,7 +55,7 @@ export default class ObjectCondition {
         const notValue: any = input['not']
         if (notValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or valueCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             this.not = new ObjectCondition(notValue)
@@ -63,13 +64,13 @@ export default class ObjectCondition {
         const fieldConditionValue: any = input['fieldCondition']
         if (fieldConditionValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or valueCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             this.fieldCondition = new FieldCondition(fieldConditionValue)
         }
         if (!oneConditionSpecified) {
-            throw 'Must specify one and only one of: all, any, not, or fieldCondition'
+            throw oneAndOnlyOneMsg
         }
     }
 

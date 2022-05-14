@@ -13,10 +13,11 @@ export default class ArrayCondition {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or sizeCondition'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or sizeCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(allArray)) {
@@ -34,7 +35,7 @@ export default class ArrayCondition {
         const anyArray: any = input['any']
         if (anyArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or sizeCondition'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(anyArray)) {
@@ -52,7 +53,7 @@ export default class ArrayCondition {
         const notValue: any = input['not']
         if (notValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or sizeCondition'
+                throw oneAndOnlyOneMsg
             }
             this.not = new ArrayCondition(notValue)
             oneConditionSpecified = true
@@ -61,14 +62,14 @@ export default class ArrayCondition {
         const sizeConditionValue: any = input['sizeCondition']
         if (sizeConditionValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or sizeCondition'
+                throw oneAndOnlyOneMsg
             }
             this.sizeCondition = new NumberCondition(sizeConditionValue)
             oneConditionSpecified = true
         }
 
         if (!oneConditionSpecified) {
-            throw 'Must specify one and only one of: sizeCondition'
+            throw oneAndOnlyOneMsg
         }
     }
     check(input: any) {

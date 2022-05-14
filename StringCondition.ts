@@ -12,10 +12,11 @@ export default class StringCondition {
         }
 
         let oneConditionSpecified: boolean = false
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or eq'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or eq'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(allArray)) {
@@ -33,7 +34,7 @@ export default class StringCondition {
         const anyArray: any = input['any']
         if (anyArray) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or eq'
+                throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
             if (!Array.isArray(anyArray)) {
@@ -51,7 +52,7 @@ export default class StringCondition {
         const notValue: any = input['not']
         if (notValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or eq'
+                throw oneAndOnlyOneMsg
             }
             this.not = new StringCondition(notValue)
             oneConditionSpecified = true
@@ -60,7 +61,7 @@ export default class StringCondition {
         const eqValue = input['eq']
         if (eqValue) {
             if (oneConditionSpecified) {
-                throw 'Can only have one of: all, any, not, or eq'
+                throw oneAndOnlyOneMsg
             }
             if (typeof eqValue !== 'string') {
                 throw 'eq must be a string'
@@ -68,7 +69,7 @@ export default class StringCondition {
             this.eq = eqValue
             oneConditionSpecified = true
         }
-        throw 'Must have one and only one of: all, any, not, or eq'
+        throw oneAndOnlyOneMsg
     }
     check(input: string): boolean {
         if (this.all) {
