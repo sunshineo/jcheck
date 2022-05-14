@@ -64,7 +64,10 @@ export default class NumberCondition {
         }
 
         const eqValue = input['eq']
-        if (eqValue !== null) {
+        if (eqValue !== undefined) {
+            console.log('===')
+            console.log(eqValue)
+            console.log('===')
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -76,7 +79,7 @@ export default class NumberCondition {
         }
 
         const gtValue = input['gt']
-        if (gtValue !== null) {
+        if (gtValue !== undefined) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -88,7 +91,7 @@ export default class NumberCondition {
         }
 
         const gteValue = input['gte']
-        if (gteValue !== null) {
+        if (gteValue !== undefined) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -100,7 +103,7 @@ export default class NumberCondition {
         }
 
         const ltValue = input['lt']
-        if (ltValue !== null) {
+        if (ltValue !== undefined) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -112,7 +115,7 @@ export default class NumberCondition {
         }
 
         const lteValue = input['lte']
-        if (lteValue !== null) {
+        if (lteValue !== undefined) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
