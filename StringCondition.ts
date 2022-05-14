@@ -5,6 +5,7 @@ export default class StringCondition {
     any?: StringCondition[]
     not?: StringCondition
 
+    caseInsensitive: boolean = false
     eq?: string
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -58,6 +59,14 @@ export default class StringCondition {
             oneConditionSpecified = true
         }
 
+        const caseInsensitiveValue = input['caseInsensitive']
+        if (caseInsensitiveValue) {
+            if (typeof caseInsensitiveValue !== 'boolean') {
+                throw 'caseInsensitive must be a boolean'
+            }
+            this.caseInsensitive = caseInsensitiveValue
+        }
+
         const eqValue = input['eq']
         if (eqValue) {
             if (oneConditionSpecified) {
@@ -67,6 +76,9 @@ export default class StringCondition {
                 throw 'eq must be a string'
             }
             this.eq = eqValue
+            if (this.caseInsensitive) {
+                this.eq = eqValue.toLocaleLowerCase()
+            }
             oneConditionSpecified = true
         }
         throw oneAndOnlyOneMsg
@@ -91,6 +103,11 @@ export default class StringCondition {
         if (this.not) {
             return !this.not.check(input)
         }
+
+        if (this.caseInsensitive) {
+            input = input.toLocaleLowerCase()
+        }
+
         if (this.eq) {
             return input === this.eq
         }
