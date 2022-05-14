@@ -104,7 +104,7 @@ export default class ArrayCondition {
             throw oneAndOnlyOneMsg
         }
     }
-    check(input: any) {
+    check(input: any): boolean {
         if (!Array.isArray(input)) {
             throw 'input must be an array'
         }
