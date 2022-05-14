@@ -12,6 +12,7 @@ export default class StringCondition {
     neq?: string
     startsWith?: string
     endsWith?: string
+    regex?: RegExp
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -19,7 +20,7 @@ export default class StringCondition {
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq, startsWith, endWith'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq, startsWith, endWith, regex'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -138,6 +139,21 @@ export default class StringCondition {
             }
             oneConditionSpecified = true
         }
+        const regexValue = input['regex']
+        if (regexValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof regexValue !== 'string') {
+                throw 'regex must be a string'
+            }
+            try {
+                this.regex = new RegExp(regexValue)
+            } catch(e) {
+                throw 'Provided string is not a valid regex'
+            }
+            oneConditionSpecified = true
+        }
         throw oneAndOnlyOneMsg
     }
     check(input: string): boolean {
@@ -179,6 +195,9 @@ export default class StringCondition {
         }
         if (this.endsWith) {
             return input.endsWith(this.endsWith)
+        }
+        if (this.regex) {
+            return this.regex.test(input)
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
