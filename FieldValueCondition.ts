@@ -6,8 +6,9 @@ import StringCondition from "./StringCondition"
 import NumberCondition from "./NumberCondition"
 import ArrayCondition from "./ArrayCondition"
 import ObjectCondition from "./ObjectCondition"
+import ICondition from "./ICondition"
 
-export default class FieldValueCondition {
+export default class FieldValueCondition implements ICondition {
     allowedTypes?: AllowedTypesCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition

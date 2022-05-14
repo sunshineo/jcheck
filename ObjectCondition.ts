@@ -1,8 +1,9 @@
 import objectNotArrayNotNull from "./utils"
 import FieldCondition from "./FieldCondition"
 import ArrayCondition from "./ArrayCondition"
+import ICondition from "./ICondition"
 
-export default class ObjectCondition {
+export default class ObjectCondition implements ICondition {
     all?: ObjectCondition[]
     any?: ObjectCondition[]
     not?: ObjectCondition

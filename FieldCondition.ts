@@ -1,7 +1,8 @@
 import objectNotArrayNotNull from "./utils"
 import FieldValueCondition from "./FieldValueCondition"
+import ICondition from "./ICondition"
 
-export default class FieldCondition {
+export default class FieldCondition implements ICondition {
     fieldName: string
     fieldValue: FieldValueCondition
 

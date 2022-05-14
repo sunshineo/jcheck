@@ -1,9 +1,10 @@
 import FieldValueCondition from "./FieldValueCondition"
 import FilterArrayCondition from "./FilterArrayCondition"
+import ICondition from "./ICondition"
 import NumberCondition from "./NumberCondition"
 import objectNotArrayNotNull from "./utils"
 
-export default class ArrayCondition {
+export default class ArrayCondition implements ICondition {
     all?: ArrayCondition[]
     any?: ArrayCondition[]
     not?: ArrayCondition

@@ -1,8 +1,9 @@
 import objectNotArrayNotNull from "./utils"
 import FieldValueCondition from "./FieldValueCondition"
 import NumberCondition from "./NumberCondition"
+import ICondition from "./ICondition"
 
-export default class FilterArrayCondition {
+export default class FilterArrayCondition implements ICondition {
     passFilterCount: NumberCondition
     elementFilter: FieldValueCondition
 

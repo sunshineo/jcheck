@@ -1,7 +1,8 @@
 import objectNotArrayNotNull from "./utils"
 import NumberCondition from "./NumberCondition"
+import ICondition from "./ICondition"
 
-export default class StringCondition {
+export default class StringCondition implements ICondition {
     all?: StringCondition[]
     any?: StringCondition[]
     not?: StringCondition
@@ -158,7 +159,10 @@ export default class StringCondition {
             throw oneAndOnlyOneMsg
         }
     }
-    check(input: string): boolean {
+    check(input: any): boolean {
+        if (typeof input !== 'string') {
+            throw 'input must be string'
+        }
         if (this.all) {
             for (const childCondition of this.all) {
                 if (!childCondition.check(input)) {
