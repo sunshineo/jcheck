@@ -2,46 +2,6 @@ function objectNotArrayNotNull(obj: any) {
     return obj !== null && typeof obj === 'object' && !Array.isArray(obj)
 }
 
-class StringCondition {
-    eq: string
-    constructor(input: any) {
-        if (!objectNotArrayNotNull) {
-            throw 'input must be an object not array and not null'
-        }
-        const eqValue = input['eq']
-        if (!eqValue) {
-            throw 'Currently we only support eq'
-        }
-        if (typeof eqValue !== 'string') {
-            throw 'eq must be a string'
-        }
-        this.eq = eqValue
-    }
-    check(input: string): boolean {
-        return input === this.eq
-    }
-}
-
-class NumberCondition {
-    eq: number
-    constructor(input: any) {
-        if (!objectNotArrayNotNull) {
-            throw 'input must be an object not array and not null'
-        }
-        const eqValue = input['eq']
-        if (!eqValue) {
-            throw 'Currently we only support eq'
-        }
-        if (typeof eqValue !== 'number') {
-            throw 'eq must be a number'
-        }
-        this.eq = eqValue
-    }
-    check(input: number): boolean {
-        return input === this.eq
-    }
-}
-
 class AllowedTypesCondition {
     allowNull: boolean = false
     allowBoolean: boolean = false
@@ -85,13 +45,81 @@ class AllowedTypesCondition {
     }
 }
 
+class StringCondition {
+    eq: string
+    constructor(input: any) {
+        if (!objectNotArrayNotNull) {
+            throw 'input must be an object not array and not null'
+        }
+        const eqValue = input['eq']
+        if (!eqValue) {
+            throw 'Currently we only support eq'
+        }
+        if (typeof eqValue !== 'string') {
+            throw 'eq must be a string'
+        }
+        this.eq = eqValue
+    }
+    check(input: string): boolean {
+        return input === this.eq
+    }
+}
+
+class NumberCondition {
+    eq: number
+    constructor(input: any) {
+        if (!objectNotArrayNotNull) {
+            throw 'input must be an object not array and not null'
+        }
+        const eqValue = input['eq']
+        if (!eqValue) {
+            throw 'Currently we only support eq'
+        }
+        if (typeof eqValue !== 'number') {
+            throw 'eq must be a number'
+        }
+        this.eq = eqValue
+    }
+    check(input: number): boolean {
+        return input === this.eq
+    }
+}
+
+class ArrayCondition {
+    sizeCondition: NumberCondition
+    constructor(input: any) {
+        if (!objectNotArrayNotNull) {
+            throw 'input must be an object not array and not null'
+        }
+        let oneConditionSpecified: boolean = false
+        const sizeConditionValue: any = input['sizeCondition']
+        if (sizeConditionValue) {
+            this.sizeCondition = new NumberCondition(sizeConditionValue)
+            oneConditionSpecified = true
+        }
+        if (!oneConditionSpecified) {
+            throw 'Must specify one and only one of: sizeCondition'
+        }
+    }
+    check(input: any) {
+        if (!Array.isArray(input)) {
+            throw 'input must be an array'
+        }
+        if (this.sizeCondition) {
+            const size: number = input.length
+            return this.sizeCondition.check(size)
+        }
+        throw 'ArrayCondition does not contain anything. Constructor should have thrown but did not.'
+    }
+}
+
 class FieldCondition {
     fieldName: string
     allowedTypes?: AllowedTypesCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition
     objectCondition?: ObjectCondition
-    // arrayCondition?: ArrayCondition
+    arrayCondition?: ArrayCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull) {
@@ -191,7 +219,12 @@ class FieldCondition {
                 return this.objectCondition.check(fieldValue)
             }
             // array
-            throw `We do not support array yet`
+            // no required condition on the array
+            if (!this.arrayCondition) {
+                return true
+            }
+            // has required condition on the array
+            return this.arrayCondition.check(fieldValue)
         }
         throw `We do not support field type ${fieldType}`
     }
