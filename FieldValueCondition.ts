@@ -1,15 +1,17 @@
 import objectNotArrayNotNull from "./utils"
 
-import AllowedTypesCondition from "./AllowedTypesCondition"
-
 import StringCondition from "./StringCondition"
 import NumberCondition from "./NumberCondition"
 import ArrayCondition from "./ArrayCondition"
 import ObjectCondition from "./ObjectCondition"
 import ICondition from "./ICondition"
+import BooleanCondition from "./BooleanCondition"
+
+const allowedTypes = ["null", "boolean", "string", "number", "object", "array"]
 
 export default class FieldValueCondition implements ICondition {
-    allowedTypes?: AllowedTypesCondition
+    allowedType: string
+    booleanCondition?: BooleanCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition
     objectCondition?: ObjectCondition
@@ -20,27 +22,50 @@ export default class FieldValueCondition implements ICondition {
             throw 'input must be an object not array and not null'
         }
 
-        let oneConditionSpecified: boolean = false
-        const allowedTypesValue: any = input['allowedTypes']
-        if (allowedTypesValue) {
-            this.allowedTypes = new AllowedTypesCondition(allowedTypesValue)
-            oneConditionSpecified = true
+        const allowedTypeValue = input['allowedType']
+        if (typeof allowedTypeValue !== 'string' || !allowedTypes.includes(allowedTypeValue)) {
+            throw 'Must specify allowedType as a string. Valid values are one of the 6 valid JSON types: null, boolean, string, number, object, array'
+        }
+        this.allowedType = allowedTypeValue
+
+        const booleanCoditionValue: any = input['booleanCondition']
+        if (booleanCoditionValue) {
+            if (this.allowedType !== 'boolean') {
+                throw 'Cannot specify booleanCondition when the allowedType is not boolean'
+            }
+            this.booleanCondition = new BooleanCondition(booleanCoditionValue)
         }
 
         const stringCoditionValue: any = input['stringCondition']
         if (stringCoditionValue) {
+            if (this.allowedType !== 'string') {
+                throw 'Cannot specify stringCondition when the allowedType is not string'
+            }
             this.stringCondition = new StringCondition(stringCoditionValue)
-            oneConditionSpecified = true
         }
 
-        const numberCoditionValue: any = input['numberCondition']
+        const numberCoditionValue: any = input['stringCondition']
         if (numberCoditionValue) {
+            if (this.allowedType !== 'number') {
+                throw 'Cannot specify numberCondition when the allowedType is not number'    
+            }
             this.numberCondition = new NumberCondition(numberCoditionValue)
-            oneConditionSpecified = true
         }
 
-        if (!oneConditionSpecified) {
-            throw 'Must specify one of: allowedTypes, stringCondition, numberCondition'
+        const objectCoditionValue: any = input['stringCondition']
+        if (objectCoditionValue) {
+            if (this.allowedType !== 'object') {
+                throw 'Cannot specify objectCondition when the allowedType is not object'    
+            }
+            this.objectCondition = new ObjectCondition(objectCoditionValue)
+        }
+
+        const arrayCoditionValue: any = input['stringCondition']
+        if (arrayCoditionValue) {
+            if (this.allowedType !== 'array') {
+                throw 'Cannot specify arrayCondition when the allowedType is not array'    
+            }
+            this.arrayCondition = new ArrayCondition(arrayCoditionValue)
         }
     }
 

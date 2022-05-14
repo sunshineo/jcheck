@@ -4,7 +4,9 @@ import ICondition from "./ICondition"
 
 export default class FieldCondition implements ICondition {
     fieldName: string
-    fieldValue: FieldValueCondition
+    all?: FieldValueCondition[]
+    any?: FieldValueCondition[]
+    not?: FieldValueCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -16,11 +18,52 @@ export default class FieldCondition implements ICondition {
         }
         this.fieldName = fieldNameValue
 
-        const fieldValueValue = input['fieldValue']
-        if (!objectNotArrayNotNull(fieldValueValue)) {
-            throw 'Must provide fieldValue as an object for FieldValueConditon the field value must pass'
+        let oneConditionSpecified: boolean = false
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not'
+        const allArray: any = input['all']
+        if (allArray) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            oneConditionSpecified = true
+            if (!Array.isArray(allArray)) {
+                throw '"all" must be an array'
+            }
+            if (allArray.length === 0) {
+                throw '"all" array cannot be empty'
+            }
+            this.all = []
+            for(const cond of allArray) {
+                this.all.push(new FieldValueCondition(cond))
+            }
         }
-        this.fieldValue = new FieldValueCondition(fieldValueValue)
+        
+        const anyArray: any = input['any']
+        if (anyArray) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            oneConditionSpecified = true
+            if (!Array.isArray(anyArray)) {
+                throw '"any" must be an array'
+            }
+            if (anyArray.length === 0) {
+                throw '"any" array cannot be empty'
+            }
+            this.any = []
+            for(const cond of anyArray) {
+                this.any.push(new FieldValueCondition(cond))
+            }
+        }
+
+        const notValue: any = input['not']
+        if (notValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            oneConditionSpecified = true
+            this.not = new FieldValueCondition(notValue)
+        }
     }
 
     check(input: any): boolean {
@@ -28,6 +71,24 @@ export default class FieldCondition implements ICondition {
             throw 'input must be an object not array and not null'
         }
         const fieldValue: any = input[this.fieldName]
-        return this.fieldValue.check(fieldValue)
+        if (this.all) {
+            for (const childCondition of this.all) {
+                if (!childCondition.check(fieldValue)) {
+                    return false
+                }
+            }
+            return true
+        }
+        if (this.any) {
+            for (const childCondition of this.any) {
+                if (childCondition.check(fieldValue)) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (this.not) {
+            return !this.not.check(fieldValue)
+        }
     }
 }
