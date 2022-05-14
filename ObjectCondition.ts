@@ -7,16 +7,16 @@ export default class ObjectCondition {
     any?: ObjectCondition[]
     not?: ObjectCondition
 
-    fieldCondition?: FieldCondition
-    keysCondition?: ArrayCondition
-    valuesCondition?: ArrayCondition
+    field?: FieldCondition
+    fieldNames?: ArrayCondition
+    fieldValues?: ArrayCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull) {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or fieldCondition, keysCondition, valuesCondition'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or field, fieldNames, fieldValues'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -62,31 +62,31 @@ export default class ObjectCondition {
             this.not = new ObjectCondition(notValue)
         }
 
-        const fieldConditionValue: any = input['fieldCondition']
-        if (fieldConditionValue) {
+        const fieldValue: any = input['field']
+        if (fieldValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
-            this.fieldCondition = new FieldCondition(fieldConditionValue)
+            this.field = new FieldCondition(fieldValue)
         }
 
-        const keysConditionValue: any = input['keysCondition']
-        if (keysConditionValue) {
+        const fieldNamesValue: any = input['fieldNames']
+        if (fieldNamesValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
-            this.keysCondition = new ArrayCondition(keysConditionValue)
+            this.fieldNames = new ArrayCondition(fieldNamesValue)
         }
 
-        const valuesConditionValue: any = input['valuesCondition']
-        if (valuesConditionValue) {
+        const fieldValuesValue: any = input['fieldValues']
+        if (fieldValuesValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
             oneConditionSpecified = true
-            this.valuesCondition = new ArrayCondition(valuesConditionValue)
+            this.fieldValues = new ArrayCondition(fieldValuesValue)
         }
         
         if (!oneConditionSpecified) {
@@ -117,8 +117,8 @@ export default class ObjectCondition {
         if (this.not) {
             return !this.not.check(input)
         }
-        if (this.fieldCondition) {
-            return this.fieldCondition.check(input)
+        if (this.field) {
+            return this.field.check(input)
         }
         throw 'ObjectConditon does not contain anything. Constructor should have thrown but did not.'
     }
