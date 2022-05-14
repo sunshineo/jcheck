@@ -1,4 +1,4 @@
-import objectNotArrayNotNull from "./utils"
+import { objectNotArrayNotNull } from "./utils"
 
 export default class BooleanCondition {
     eq: boolean

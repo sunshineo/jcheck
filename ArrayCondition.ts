@@ -1,7 +1,7 @@
 import FieldValueCondition from "./FieldValueCondition"
 import FilterArrayCondition from "./FilterArrayCondition"
 import NumberCondition from "./NumberCondition"
-import objectNotArrayNotNull from "./utils"
+import { objectNotArrayNotNull } from "./utils"
 
 export default class ArrayCondition {
     all?: ArrayCondition[]

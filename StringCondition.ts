@@ -1,4 +1,4 @@
-import objectNotArrayNotNull from "./utils"
+import { objectNotArrayNotNull } from "./utils"
 import NumberCondition from "./NumberCondition"
 
 export default class StringCondition {

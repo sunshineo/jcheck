@@ -1,4 +1,4 @@
-import objectNotArrayNotNull from "./utils"
+import { objectNotArrayNotNull } from "./utils"
 import FieldCondition from "./FieldCondition"
 import ArrayCondition from "./ArrayCondition"
 

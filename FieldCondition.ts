@@ -1,4 +1,4 @@
-import objectNotArrayNotNull from "./utils"
+import { objectNotArrayNotNull } from "./utils"
 import FieldValueCondition from "./FieldValueCondition"
 
 export default class FieldCondition {
