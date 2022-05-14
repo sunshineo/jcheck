@@ -7,6 +7,8 @@ export default class StringCondition {
 
     caseInsensitive: boolean = false
     eq?: string
+    neq?: string
+
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
@@ -81,6 +83,20 @@ export default class StringCondition {
             }
             oneConditionSpecified = true
         }
+        const neqValue = input['neq']
+        if (neqValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof neqValue !== 'string') {
+                throw 'neq must be a string'
+            }
+            this.neq = neqValue
+            if (this.caseInsensitive) {
+                this.neq = neqValue.toLocaleLowerCase()
+            }
+            oneConditionSpecified = true
+        }
         throw oneAndOnlyOneMsg
     }
     check(input: string): boolean {
@@ -110,6 +126,9 @@ export default class StringCondition {
 
         if (this.eq) {
             return input === this.eq
+        }
+        if (this.neq) {
+            return input !== this.neq
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
