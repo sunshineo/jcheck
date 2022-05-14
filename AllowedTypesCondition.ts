@@ -5,8 +5,8 @@ export default class AllowedTypesCondition {
     allowBoolean: boolean = false
     allowString: boolean = false
     allowNumber: boolean = false
-    // allowObject: boolean = false
-    // allowArray: boolean = false
+    allowObject: boolean = false
+    allowArray: boolean = false
 
     constructor(input: any) {
         if (!objectNotArrayNotNull) {
@@ -39,6 +39,20 @@ export default class AllowedTypesCondition {
                 throw 'allowNumber must be a boolean value'
             }
             this.allowNumber = allowNumberValue
+        }
+        const allowObjectValue: any = input['allowObject']
+        if (allowObjectValue) {
+            if (typeof allowObjectValue !== 'boolean') {
+                throw 'allowObject must be a boolean value'
+            }
+            this.allowObject = allowObjectValue
+        }
+        const allowArrayValue: any = input['allowArray']
+        if (allowArrayValue) {
+            if (typeof allowArrayValue !== 'boolean') {
+                throw 'allowArray must be a boolean value'
+            }
+            this.allowArray = allowArrayValue
         }
     }
 }
