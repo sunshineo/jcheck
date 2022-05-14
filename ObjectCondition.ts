@@ -12,7 +12,7 @@ export default class ObjectCondition {
     fieldValues?: ArrayCondition
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull) {
+        if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
@@ -95,7 +95,7 @@ export default class ObjectCondition {
     }
 
     check(input: any): boolean {
-        if (!objectNotArrayNotNull) {
+        if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         if (this.all) {

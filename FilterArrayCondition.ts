@@ -3,8 +3,8 @@ import FieldValueCondition from "./FieldValueCondition"
 import NumberCondition from "./NumberCondition"
 
 export default class FilterArrayCondition {
-    passFilterCountCondition: NumberCondition
-    elementFilterCondition: FieldValueCondition
+    passFilterCount: NumberCondition
+    elementFilter: FieldValueCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -14,13 +14,13 @@ export default class FilterArrayCondition {
         if (!objectNotArrayNotNull(passFilterCountValue)) {
             throw 'passFilterCount must be an object not array and not null'
         }
-        this.passFilterCountCondition = new NumberCondition(this.passFilterCountCondition)
+        this.passFilterCount = new NumberCondition(this.passFilterCount)
 
         const elementFilterValue: any = input['elementFilter']
         if (!objectNotArrayNotNull(elementFilterValue)) {
             throw 'elementFilter must be an object not array and not null'
         }
-        this.elementFilterCondition = new FieldValueCondition(elementFilterValue)
+        this.elementFilter = new FieldValueCondition(elementFilterValue)
     }
 
     check(input: any): boolean {
@@ -29,10 +29,10 @@ export default class FilterArrayCondition {
         }
         let size = 0
         for (const element of input) {
-            if (this.elementFilterCondition.check(element)) {
+            if (this.elementFilter.check(element)) {
                 size ++
             }
         }
-        return this.passFilterCountCondition.check(size)
+        return this.passFilterCount.check(size)
     }
 }

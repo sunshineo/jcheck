@@ -8,17 +8,17 @@ export default class ArrayCondition {
     any?: ArrayCondition[]
     not?: ArrayCondition
 
-    sizeCondition?: NumberCondition
-    hasElementCondition?: FieldValueCondition
-    hasNoElementCondition?: FieldValueCondition
-    filterArrayCondition?: FilterArrayCondition
+    size?: NumberCondition
+    hasElement?: FieldValueCondition
+    hasNoElement?: FieldValueCondition
+    filterArray?: FilterArrayCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, sizeCondition, hasElement, hasNoElement, filterArrayCondition'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, size, hasElement, hasNoElement, filterArray'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -64,39 +64,39 @@ export default class ArrayCondition {
             oneConditionSpecified = true
         }
 
-        const sizeConditionValue: any = input['sizeCondition']
-        if (sizeConditionValue) {
+        const sizeValue: any = input['size']
+        if (sizeValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            this.sizeCondition = new NumberCondition(sizeConditionValue)
+            this.size = new NumberCondition(sizeValue)
             oneConditionSpecified = true
         }
 
-        const hasElementConditionValue: any = input['hasElementCondition']
-        if (hasElementConditionValue) {
+        const hasElementValue: any = input['hasElement']
+        if (hasElementValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            this.hasElementCondition = new FieldValueCondition(hasElementConditionValue)
+            this.hasElement = new FieldValueCondition(hasElementValue)
             oneConditionSpecified = true
         }
 
-        const hasNoElementConditionValue: any = input['hasNoElementCondition']
-        if (hasNoElementConditionValue) {
+        const hasNoElementValue: any = input['hasNoElement']
+        if (hasNoElementValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            this.hasNoElementCondition = new FieldValueCondition(hasNoElementConditionValue)
+            this.hasNoElement = new FieldValueCondition(hasNoElementValue)
             oneConditionSpecified = true
         }
 
-        const filterArrayConditionValue: any = input['filterArrayCondition']
-        if (filterArrayConditionValue) {
+        const filterArrayValue: any = input['filterArray']
+        if (filterArrayValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            this.filterArrayCondition = new FilterArrayCondition(filterArrayConditionValue)
+            this.filterArray = new FilterArrayCondition(filterArrayValue)
             oneConditionSpecified = true
         }
 
@@ -127,31 +127,31 @@ export default class ArrayCondition {
         if (this.not) {
             return !this.not.check(input)
         }
-        if (this.sizeCondition) {
+        if (this.size) {
             const size: number = input.length
-            return this.sizeCondition.check(size)
+            return this.size.check(size)
         }
 
-        if (this.hasElementCondition) {
+        if (this.hasElement) {
             for (const element of input) {
-                if (this.hasElementCondition.check(element)) {
+                if (this.hasElement.check(element)) {
                     return true
                 }
             }
             return false
         }
 
-        if (this.hasNoElementCondition) {
+        if (this.hasNoElement) {
             for (const element of input) {
-                if (this.hasNoElementCondition.check(element)) {
+                if (this.hasNoElement.check(element)) {
                     return false
                 }
             }
             return true
         }
 
-        if (this.filterArrayCondition) {
-            return this.filterArrayCondition.check(input)
+        if (this.filterArray) {
+            return this.filterArray.check(input)
         }
         throw 'ArrayCondition does not contain anything. Constructor should have thrown but did not.'
     }

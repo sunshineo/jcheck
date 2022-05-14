@@ -3,7 +3,7 @@ import FieldValueCondition from "./FieldValueCondition"
 
 export default class FieldCondition {
     fieldName: string
-    fieldValueCondition: FieldValueCondition
+    fieldValue: FieldValueCondition
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -18,21 +18,21 @@ export default class FieldCondition {
         }
         this.fieldName = fieldNameValue
 
-        const fieldValueConditionValue = input['fieldValueCondition']
-        if (!fieldValueConditionValue) {
-            throw 'Must provide fieldValueCondition'
+        const fieldValueValue = input['fieldValue']
+        if (!fieldValueValue) {
+            throw 'Must provide fieldValue'
         }
-        if (!objectNotArrayNotNull(fieldValueConditionValue)) {
-            throw 'fieldValueCondition must be an object not array and not null'
+        if (!objectNotArrayNotNull(fieldValueValue)) {
+            throw 'fieldValue must be an object not array and not null'
         }
-        this.fieldValueCondition = new FieldValueCondition(fieldValueConditionValue)
+        this.fieldValue = new FieldValueCondition(fieldValueValue)
     }
 
     check(input: any): boolean {
-        if (!objectNotArrayNotNull) {
+        if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         const fieldValue: any = input[this.fieldName]
-        return this.fieldValueCondition.check(fieldValue)
+        return this.fieldValue.check(fieldValue)
     }
 }

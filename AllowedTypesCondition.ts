@@ -9,7 +9,7 @@ export default class AllowedTypesCondition {
     allowArray: boolean = false
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull) {
+        if (!objectNotArrayNotNull(input)) {
             throw 'input must be an object not array and not null'
         }
         const allowNullValue: any = input['allowNull']
