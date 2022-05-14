@@ -64,7 +64,7 @@ export default class NumberCondition {
         }
 
         const eqValue = input['eq']
-        if (eqValue) {
+        if (eqValue !== null) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -76,7 +76,7 @@ export default class NumberCondition {
         }
 
         const gtValue = input['gt']
-        if (gtValue) {
+        if (gtValue !== null) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -88,7 +88,7 @@ export default class NumberCondition {
         }
 
         const gteValue = input['gte']
-        if (gteValue) {
+        if (gteValue !== null) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -100,7 +100,7 @@ export default class NumberCondition {
         }
 
         const ltValue = input['lt']
-        if (ltValue) {
+        if (ltValue !== null) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -112,7 +112,7 @@ export default class NumberCondition {
         }
 
         const lteValue = input['lte']
-        if (lteValue) {
+        if (lteValue !== null) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -123,7 +123,9 @@ export default class NumberCondition {
             oneConditionSpecified = true
         }
 
-        throw oneAndOnlyOneMsg
+        if (!oneConditionSpecified) {
+            throw oneAndOnlyOneMsg
+        }
     }
     check(input: number): boolean {
         if (this.all) {
@@ -152,13 +154,13 @@ export default class NumberCondition {
             return input > this.gt
         }
         if (this.gte) {
-            return input >= this.gt
+            return input >= this.gte
         }
         if (this.lt) {
             return input < this.lt
         }
         if (this.lte) {
-            return input < this.lte
+            return input <= this.lte
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
