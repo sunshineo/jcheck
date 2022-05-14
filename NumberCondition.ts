@@ -1,7 +1,6 @@
-import ICondition from "./ICondition"
 import objectNotArrayNotNull from "./utils"
 
-export default class NumberCondition implements ICondition {
+export default class NumberCondition {
     all?: NumberCondition[]
     any?: NumberCondition[]
     not?: NumberCondition

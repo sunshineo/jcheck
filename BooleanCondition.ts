@@ -1,7 +1,6 @@
 import objectNotArrayNotNull from "./utils"
-import ICondition from "./ICondition"
 
-export default class BooleanCondition implements ICondition {
+export default class BooleanCondition {
     eq: boolean
 
     constructor(input: any) {

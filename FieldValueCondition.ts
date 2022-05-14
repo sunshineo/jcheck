@@ -4,12 +4,11 @@ import StringCondition from "./StringCondition"
 import NumberCondition from "./NumberCondition"
 import ArrayCondition from "./ArrayCondition"
 import ObjectCondition from "./ObjectCondition"
-import ICondition from "./ICondition"
 import BooleanCondition from "./BooleanCondition"
 
 const allowedTypes = ["null", "boolean", "string", "number", "object", "array"]
 
-export default class FieldValueCondition implements ICondition {
+export default class FieldValueCondition {
     allowedType: string
     booleanCondition?: BooleanCondition
     stringCondition?: StringCondition

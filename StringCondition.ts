@@ -1,8 +1,7 @@
 import objectNotArrayNotNull from "./utils"
 import NumberCondition from "./NumberCondition"
-import ICondition from "./ICondition"
 
-export default class StringCondition implements ICondition {
+export default class StringCondition {
     all?: StringCondition[]
     any?: StringCondition[]
     not?: StringCondition
