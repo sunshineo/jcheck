@@ -22,11 +22,31 @@ class StringCondition {
     }
 }
 
+class NumberCondition {
+    eq: number
+    constructor(input: any) {
+        if (!objectNotArrayNotNull) {
+            throw 'input must be an object not array and not null'
+        }
+        const eqValue = input['eq']
+        if (!eqValue) {
+            throw 'Currently we only support eq'
+        }
+        if (typeof eqValue !== 'number') {
+            throw 'eq must be a number'
+        }
+        this.eq = eqValue
+    }
+    check(input: number): boolean {
+        return input === this.eq
+    }
+}
+
 class AllowedTypesCondition {
     allowNull: boolean = false
     allowBoolean: boolean = false
     allowString: boolean = false
-    // allowNumber: boolean = false
+    allowNumber: boolean = false
     // allowObject: boolean = false
     // allowArray: boolean = false
 
@@ -55,6 +75,13 @@ class AllowedTypesCondition {
             }
             this.allowString = allowStringValue
         }
+        const allowNumberValue: any = input['allowNumber']
+        if (allowNumberValue) {
+            if (typeof allowNumberValue !== 'boolean') {
+                throw 'allowNumber must be a boolean value'
+            }
+            this.allowNumber = allowNumberValue
+        }
     }
 }
 
@@ -62,7 +89,7 @@ class FieldCondition {
     fieldName: string
     allowedTypes?: AllowedTypesCondition
     stringCondition?: StringCondition
-    // numberCondition?: NumberCondition
+    numberCondition?: NumberCondition
     // arrayCondition?: ArrayCondition
     // objectCondition?: ObjectCondition
 
@@ -92,8 +119,14 @@ class FieldCondition {
             oneConditionSpecified = true
         }
 
+        const numberCoditionValue: any = input['numberCondition']
+        if (numberCoditionValue) {
+            this.numberCondition = new NumberCondition(numberCoditionValue)
+            oneConditionSpecified = true
+        }
+
         if (!oneConditionSpecified) {
-            throw 'Must specify one of: allowedTypes, stringCondition'
+            throw 'Must specify one of: allowedTypes, stringCondition, numberCondition'
         }
     }
 
@@ -133,6 +166,19 @@ class FieldCondition {
             }
             // requires something on the string
             return this.stringCondition.check(fieldValue)
+        }
+        if (fieldType === 'number') {
+            // number not allowed
+            if (this.allowedTypes && !this.allowedTypes?.allowNumber) {
+                return false
+            }
+            // number allowed
+            // no requirement on the number
+            if (!this.numberCondition) {
+                return true
+            }
+            // requires something on the number
+            return this.numberCondition.check(fieldValue)
         }
         throw `We do not support field type ${fieldType}`
     }
