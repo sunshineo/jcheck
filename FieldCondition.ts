@@ -10,20 +10,14 @@ export default class FieldCondition {
             throw 'input must be an object not array and not null'
         }
         const fieldNameValue: any = input['fieldName']
-        if (!fieldNameValue) {
-            throw 'Must provide fieldName'
-        }
         if (typeof fieldNameValue !== 'string') {
-            throw 'fieldName must be string'
+            throw 'Must provide fieldName as a string'
         }
         this.fieldName = fieldNameValue
 
         const fieldValueValue = input['fieldValue']
-        if (!fieldValueValue) {
-            throw 'Must provide fieldValue'
-        }
         if (!objectNotArrayNotNull(fieldValueValue)) {
-            throw 'fieldValue must be an object not array and not null'
+            throw 'Must provide fieldValue as an object for FieldValueConditon the field value must pass'
         }
         this.fieldValue = new FieldValueCondition(fieldValueValue)
     }
