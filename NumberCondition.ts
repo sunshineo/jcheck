@@ -8,6 +8,8 @@ export default class NumberCondition {
     eq?: number
     gt?: number
     gte?: number
+    lt?: number
+    lte?: number
 
     constructor(input: any) {
         if (!objectNotArrayNotNull(input)) {
@@ -15,7 +17,7 @@ export default class NumberCondition {
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, eq, gt, gte'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, eq, gt, gte, lt, lte'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -97,6 +99,30 @@ export default class NumberCondition {
             oneConditionSpecified = true
         }
 
+        const ltValue = input['lt']
+        if (ltValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof ltValue !== 'number') {
+                throw 'lt must be a Number'
+            }
+            this.lt = ltValue
+            oneConditionSpecified = true
+        }
+
+        const lteValue = input['lte']
+        if (lteValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof lteValue !== 'number') {
+                throw 'lte must be a Number'
+            }
+            this.lte = lteValue
+            oneConditionSpecified = true
+        }
+
         throw oneAndOnlyOneMsg
     }
     check(input: number): boolean {
@@ -127,6 +153,12 @@ export default class NumberCondition {
         }
         if (this.gte) {
             return input >= this.gt
+        }
+        if (this.lt) {
+            return input < this.lt
+        }
+        if (this.lte) {
+            return input < this.lte
         }
         throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
