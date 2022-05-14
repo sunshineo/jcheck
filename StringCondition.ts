@@ -71,6 +71,28 @@ export default class StringCondition {
         throw 'Must have one and only one of: all, any, not, or eq'
     }
     check(input: string): boolean {
-        return input === this.eq
+        if (this.all) {
+            for (const childCondition of this.all) {
+                if (!childCondition.check(input)) {
+                    return false
+                }
+            }
+            return true
+        }
+        if (this.any) {
+            for (const childCondition of this.any) {
+                if (childCondition.check(input)) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (this.not) {
+            return !this.not.check(input)
+        }
+        if (this.eq) {
+            return input === this.eq
+        }
+        throw 'StringConditon does not contain anything. Constructor should have thrown but did not.'
     }
 }
