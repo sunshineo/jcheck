@@ -9,7 +9,7 @@ export default class StringCondition {
     caseInsensitive: boolean = false
     lengthCondition?: NumberCondition
     eq?: string
-    neq?: string
+    ne?: string
     startsWith?: string
     endsWith?: string
     regex?: RegExp
@@ -20,7 +20,7 @@ export default class StringCondition {
         }
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, neq, startsWith, endWith, regex'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, ne, startsWith, endWith, regex'
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -97,17 +97,17 @@ export default class StringCondition {
             }
             oneConditionSpecified = true
         }
-        const neqValue = input['neq']
-        if (neqValue) {
+        const neValue = input['ne']
+        if (neValue) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof neqValue !== 'string') {
-                throw 'neq must be a string'
+            if (typeof neValue !== 'string') {
+                throw 'ne must be a string'
             }
-            this.neq = neqValue
+            this.ne = neValue
             if (this.caseInsensitive) {
-                this.neq = neqValue.toLocaleLowerCase()
+                this.ne = neValue.toLocaleLowerCase()
             }
             oneConditionSpecified = true
         }
@@ -192,8 +192,8 @@ export default class StringCondition {
         if (this.eq) {
             return input === this.eq
         }
-        if (this.neq) {
-            return input !== this.neq
+        if (this.ne) {
+            return input !== this.ne
         }
         if (this.startsWith) {
             return input.startsWith(this.startsWith)
