@@ -6,6 +6,7 @@ export default class NumberCondition {
     not?: NumberCondition
 
     eq?: number
+    ne?: number
     gt?: number
     gte?: number
     lt?: number
@@ -23,7 +24,6 @@ export default class NumberCondition {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
             if (!Array.isArray(allArray)) {
                 throw '"all" must be an array'
             }
@@ -34,6 +34,7 @@ export default class NumberCondition {
             for(const cond of allArray) {
                 this.all.push(new NumberCondition(cond))
             }
+            oneConditionSpecified = true
         }
         
         const anyArray: any = input['any']
@@ -41,7 +42,6 @@ export default class NumberCondition {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
             if (!Array.isArray(anyArray)) {
                 throw '"any" must be an array'
             }
@@ -52,6 +52,7 @@ export default class NumberCondition {
             for(const cond of anyArray) {
                 this.any.push(new NumberCondition(cond))
             }
+            oneConditionSpecified = true
         }
 
         const notValue: any = input['not']
@@ -72,6 +73,17 @@ export default class NumberCondition {
                 throw 'eq must be a Number'
             }
             this.eq = eqValue
+            oneConditionSpecified = true
+        }
+        const neValue = input['ne']
+        if (neValue !== undefined) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            if (typeof neValue !== 'number') {
+                throw 'ne must be a Number'
+            }
+            this.ne = neValue
             oneConditionSpecified = true
         }
 
@@ -152,6 +164,9 @@ export default class NumberCondition {
         }
         if (this.eq !== undefined) {
             return input === this.eq
+        }
+        if (this.ne !== undefined) {
+            return input !== this.ne
         }
         if (this.gt !== undefined) {
             return input > this.gt
