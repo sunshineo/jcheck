@@ -3,6 +3,7 @@ import FieldValueCondition from "./FieldValueCondition"
 
 export default class FieldCondition {
     fieldName: string
+    fieldValue?: FieldValueCondition
     all?: FieldValueCondition[]
     any?: FieldValueCondition[]
     not?: FieldValueCondition
@@ -18,7 +19,16 @@ export default class FieldCondition {
         this.fieldName = fieldNameValue
 
         let oneConditionSpecified: boolean = false
-        const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not'
+        const oneAndOnlyOneMsg = 'Must have one and only one of: fieldValue, all, any, not'
+        const feildValueValue: any = input['fieldValue']
+        if (feildValueValue) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            this.fieldValue = new FieldValueCondition(feildValueValue)
+            oneConditionSpecified = true
+        }
+        
         const allArray: any = input['all']
         if (allArray) {
             if (oneConditionSpecified) {
@@ -70,6 +80,9 @@ export default class FieldCondition {
             throw 'input must be an object not array and not null'
         }
         const fieldValue: any = input[this.fieldName]
+        if (this.fieldValue) {
+            return this.fieldValue.check(fieldValue)
+        }
         if (this.all) {
             for (const childCondition of this.all) {
                 if (!childCondition.check(fieldValue)) {
