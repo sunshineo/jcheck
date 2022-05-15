@@ -14,7 +14,7 @@ export default class FilterArrayCondition {
         if (!objectNotArrayNotNull(passFilterCountValue)) {
             throw 'passFilterCount must be an object not array and not null'
         }
-        this.passFilterCount = new NumberCondition(this.passFilterCount)
+        this.passFilterCount = new NumberCondition(passFilterCountValue)
 
         const elementFilterValue: any = input['elementFilter']
         if (!objectNotArrayNotNull(elementFilterValue)) {
