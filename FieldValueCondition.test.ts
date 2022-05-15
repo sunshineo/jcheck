@@ -70,6 +70,16 @@ describe ('FieldValueCondition', () => {
                 })
             })
         })
+        describe('dateCondition', () => {
+            test('if date is not allowedType throw', () => {
+                expect(() => {
+                    new FieldValueCondition({
+                        allowedType: 'null',
+                        dateCondition: ''
+                    })
+                })
+            })
+        })
     })
     describe('check function', () => {
         describe('null condition', () => {
@@ -154,6 +164,20 @@ describe ('FieldValueCondition', () => {
                     allowedType: 'object'
                 })
                 expect(cond.check('not-object')).toBe(false)
+            })
+        })
+        describe('date condition', () => {
+            test('return true for date', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'date'
+                })
+                expect(cond.check('2022-05-15T07:45:07.172Z')).toBe(true)
+            })
+            test('return false for not date', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'date'
+                })
+                expect(cond.check('not-date')).toBe(false)
             })
         })
     })
