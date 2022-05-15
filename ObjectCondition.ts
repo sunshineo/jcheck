@@ -120,6 +120,12 @@ export default class ObjectCondition {
         if (this.field) {
             return this.field.check(input)
         }
+        if (this.fieldNames) {
+            return this.fieldNames.check(Object.keys(input))
+        }
+        if (this.fieldValues) {
+            return this.fieldValues.check(Object.values(input))
+        }
         throw 'ObjectConditon does not contain anything. Constructor should have thrown but did not.'
     }
 }
