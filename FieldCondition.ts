@@ -73,6 +73,10 @@ export default class FieldCondition {
             oneConditionSpecified = true
             this.not = new FieldValueCondition(notValue)
         }
+
+        if (!oneConditionSpecified) {
+            throw oneAndOnlyOneMsg
+        }
     }
 
     check(input: any): boolean {
