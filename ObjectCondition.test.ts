@@ -31,5 +31,18 @@ describe ('ObjectCondition', () => {
             expect(() => {new ObjectCondition({ fieldValue: "", fieldNames: "" })}).toThrow()
         })
     })
+    describe('check function', () => {
+        test('input not object should throw', () => {
+            const cond = new ObjectCondition({
+                field: {
+                    fieldName: "a",
+                    fieldValue: {
+                        allowedType: 'null'
+                    }
+                }
+            })
+            expect(() => {cond.check(0)}).toThrow()
+        })
+    })
 })
 
