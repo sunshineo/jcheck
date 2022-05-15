@@ -28,7 +28,7 @@ describe ('ObjectCondition', () => {
             })
         })
         test('has multiple conditions should throw', () => {
-            expect(() => {new ObjectCondition({ fieldValue: "", fieldNames: "" })}).toThrow()
+            expect(() => {new ObjectCondition({ fieldValues: "", fieldNames: "" })}).toThrow()
         })
     })
     describe('check function', () => {
