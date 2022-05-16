@@ -1,7 +1,7 @@
 import { objectNotArrayNotNull } from "./utils"
-import FieldValueCondition from "./FieldValueCondition"
+import { FieldValueCondition } from "./FieldValueCondition"
 
-export default class FieldCondition {
+export class FieldCondition {
     fieldName: string
     fieldValue?: FieldValueCondition
     all?: FieldValueCondition[]
@@ -81,7 +81,7 @@ export default class FieldCondition {
 
     check(input: any): boolean {
         if (!objectNotArrayNotNull(input)) {
-            throw 'input must be an object not array and not null'
+            return false
         }
         const fieldValue: any = input[this.fieldName]
         if (this.fieldValue) {

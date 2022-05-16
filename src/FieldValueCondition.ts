@@ -1,15 +1,15 @@
 import { objectNotArrayNotNull } from "./utils"
 
-import StringCondition from "./StringCondition"
-import NumberCondition from "./NumberCondition"
-import ArrayCondition from "./ArrayCondition"
-import ObjectCondition from "./ObjectCondition"
-import BooleanCondition from "./BooleanCondition"
-import DateCondition from "./DateCondition"
+import { StringCondition } from "./StringCondition"
+import { NumberCondition } from "./NumberCondition"
+import { ArrayCondition } from "./ArrayCondition"
+import { ObjectCondition } from "./ObjectCondition"
+import { BooleanCondition } from "./BooleanCondition"
+import { DateCondition } from "./DateCondition"
 
 const allowedTypes = ["null", "boolean", "string", "number", "object", "array", "date"]
 
-export default class FieldValueCondition {
+export class FieldValueCondition {
     allowedType: string
     booleanCondition?: BooleanCondition
     stringCondition?: StringCondition

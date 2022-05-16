@@ -1,8 +1,8 @@
 import { objectNotArrayNotNull } from "./utils"
-import FieldValueCondition from "./FieldValueCondition"
-import NumberCondition from "./NumberCondition"
+import { FieldValueCondition } from "./FieldValueCondition"
+import { NumberCondition } from "./NumberCondition"
 
-export default class FilterArrayCondition {
+export class FilterArrayCondition {
     passFilterCount: NumberCondition
     elementFilter: FieldValueCondition
 
@@ -25,7 +25,7 @@ export default class FilterArrayCondition {
 
     check(input: any): boolean {
         if (!Array.isArray(input)) {
-            throw 'input must be an array'
+            return false
         }
         let size = 0
         for (const element of input) {

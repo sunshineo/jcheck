@@ -1,6 +1,6 @@
 import { objectNotArrayNotNull } from "./utils"
 
-export default class BooleanCondition {
+export class BooleanCondition {
     eq: boolean
 
     constructor(input: any) {
@@ -15,7 +15,7 @@ export default class BooleanCondition {
     }
     check(input: any): boolean {
         if (typeof input !== 'boolean') {
-            throw 'input must be boolean'
+            return false
         }
         return input === this.eq
     }

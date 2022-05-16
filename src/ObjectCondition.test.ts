@@ -1,4 +1,4 @@
-import ObjectCondition from "./ObjectCondition"
+import { ObjectCondition } from "./ObjectCondition"
 
 describe ('ObjectCondition', () => {
     describe('constructor', () => {
@@ -32,7 +32,7 @@ describe ('ObjectCondition', () => {
         })
     })
     describe('check function', () => {
-        test('input not object should throw', () => {
+        test('input not object return false', () => {
             const cond = new ObjectCondition({
                 field: {
                     fieldName: "a",
@@ -41,7 +41,7 @@ describe ('ObjectCondition', () => {
                     }
                 }
             })
-            expect(() => {cond.check(0)}).toThrow()
+            expect(cond.check(0)).toBe(false)
         })
     })
 })

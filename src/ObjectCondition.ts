@@ -1,8 +1,8 @@
 import { objectNotArrayNotNull } from "./utils"
-import FieldCondition from "./FieldCondition"
-import ArrayCondition from "./ArrayCondition"
+import { FieldCondition } from "./FieldCondition"
+import { ArrayCondition } from "./ArrayCondition"
 
-export default class ObjectCondition {
+export class ObjectCondition {
     all?: ObjectCondition[]
     any?: ObjectCondition[]
     not?: ObjectCondition
@@ -96,7 +96,7 @@ export default class ObjectCondition {
 
     check(input: any): boolean {
         if (!objectNotArrayNotNull(input)) {
-            throw 'input must be an object not array and not null'
+            return false
         }
         if (this.all) {
             for (const childCondition of this.all) {

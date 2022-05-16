@@ -1,4 +1,4 @@
-import StringCondition from "./StringCondition"
+import { StringCondition } from "./StringCondition"
 
 describe ('StringCondition', () => {
     describe('constructor', () => {
@@ -63,9 +63,9 @@ describe ('StringCondition', () => {
     })
     
     describe('check function', () => {
-        test('input not string should throw', () => {
+        test('input not string return false', () => {
             const cond = new StringCondition({ eq: 'a' })
-            expect(() => {cond.check(0)}).toThrow()
+            expect(cond.check(0)).toBe(false)
         })
         describe('eq', () => {
             test('equal returns true', () => {

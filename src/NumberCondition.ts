@@ -1,6 +1,6 @@
 import { objectNotArrayNotNull } from "./utils"
 
-export default class NumberCondition {
+export class NumberCondition {
     all?: NumberCondition[]
     any?: NumberCondition[]
     not?: NumberCondition
@@ -141,7 +141,7 @@ export default class NumberCondition {
     }
     check(input: any): boolean {
         if (typeof input !== 'number') {
-            throw 'input must be a number'
+            return false
         }
         if (this.all) {
             for (const childCondition of this.all) {

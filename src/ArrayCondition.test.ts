@@ -1,4 +1,4 @@
-import ArrayCondition from "./ArrayCondition"
+import { ArrayCondition } from "./ArrayCondition"
 
 describe ('ArrayCondition', () => {
     describe('constructor', () => {
@@ -32,13 +32,13 @@ describe ('ArrayCondition', () => {
         })
     })
     describe('check', () => {
-        test('throw if input not array', () => {
+        test('not array false', () => {
             const cond = new ArrayCondition({
                 size: {
                     eq: 0
                 }
             })
-            expect(() => {cond.check('not-array')}).toThrow()
+            expect(cond.check('not-array')).toBe(false)
         })
     })
 })

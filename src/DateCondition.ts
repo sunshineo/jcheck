@@ -1,6 +1,6 @@
 import { objectNotArrayNotNull } from "./utils"
 
-export default class DateCondition {
+export class DateCondition {
     all?: DateCondition[]
     any?: DateCondition[]
     not?: DateCondition
@@ -95,7 +95,7 @@ export default class DateCondition {
     }
     check(input: any): boolean {
         if (typeof input !== 'string') {
-            throw 'input must be a string'
+            return false
         }
         if (this.all) {
             for (const childCondition of this.all) {
@@ -119,7 +119,7 @@ export default class DateCondition {
         
         const inputDate = new Date(input)
         if (isNaN(inputDate.getTime())) {
-            throw 'input must be a string representing date'
+            return false
         }
 
         if (this.before) {

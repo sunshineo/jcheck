@@ -1,4 +1,4 @@
-import DateCondition from "./DateCondition"
+import { DateCondition } from "./DateCondition"
 
 describe ('DateCondition', () => {
     describe('constructor', () => {
@@ -55,13 +55,13 @@ describe ('DateCondition', () => {
     
     describe('check function', () => {
         describe('input', () => {
-            test('input not string should throw', () => {
+            test('not string return false', () => {
                 const cond = new DateCondition({ before: '2022-05-15T07:45:07.172Z' })
-                expect(() => {cond.check(0)}).toThrow()
+                expect(cond.check(0)).toBe(false)
             })
-            test('input not string representing date should throw', () => {
+            test('not string representing date return false', () => {
                 const cond = new DateCondition({ before: '2022-05-15T07:45:07.172Z' })
-                expect(() => {cond.check('a')}).toThrow()
+                expect(cond.check('a')).toBe(false)
             })
         })
         

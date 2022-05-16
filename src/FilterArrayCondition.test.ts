@@ -1,4 +1,4 @@
-import FilterArrayCondition from "./FilterArrayCondition"
+import { FilterArrayCondition } from "./FilterArrayCondition"
 
 describe ('FilterArrayCondition', () => {
     describe('constructor', () => {
@@ -46,12 +46,12 @@ describe ('FilterArrayCondition', () => {
     })
     
     describe('check function', () => {
-        test('input not array', () => {
+        test('input not array return false', () => {
             const cond = new FilterArrayCondition({
                 passFilterCount: { eq: 0 },
                 elementFilter: { allowedType: 'null' }
             })
-            expect(() => {cond.check('not-array')}).toThrow()
+            expect(cond.check('not-array')).toBe(false)
         })
     })
 })

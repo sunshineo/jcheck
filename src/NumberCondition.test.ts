@@ -1,4 +1,4 @@
-import NumberCondition from "./NumberCondition"
+import { NumberCondition } from "./NumberCondition"
 
 describe ('NumberCondition', () => {
     describe('constructor', () => {
@@ -65,7 +65,7 @@ describe ('NumberCondition', () => {
     describe('check function', () => {
         test('input not number should throw', () => {
             const cond = new NumberCondition({ eq: 0 })
-            expect(() => {cond.check('a')}).toThrow()
+            expect(cond.check('a')).toBe(false)
         })
         describe('eq', () => {
             test('equal returns true', () => {

@@ -1,9 +1,9 @@
-import FieldValueCondition from "./FieldValueCondition"
-import FilterArrayCondition from "./FilterArrayCondition"
-import NumberCondition from "./NumberCondition"
+import { FieldValueCondition } from "./FieldValueCondition"
+import { FilterArrayCondition } from "./FilterArrayCondition"
+import { NumberCondition } from "./NumberCondition"
 import { objectNotArrayNotNull } from "./utils"
 
-export default class ArrayCondition {
+export class ArrayCondition {
     all?: ArrayCondition[]
     any?: ArrayCondition[]
     not?: ArrayCondition
@@ -106,7 +106,7 @@ export default class ArrayCondition {
     }
     check(input: any): boolean {
         if (!Array.isArray(input)) {
-            throw 'input must be an array'
+            return false
         }
         if (this.all) {
             for (const childCondition of this.all) {

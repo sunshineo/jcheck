@@ -1,7 +1,7 @@
 import { objectNotArrayNotNull } from "./utils"
-import NumberCondition from "./NumberCondition"
+import { NumberCondition } from "./NumberCondition"
 
-export default class StringCondition {
+export class StringCondition {
     all?: StringCondition[]
     any?: StringCondition[]
     not?: StringCondition
@@ -160,7 +160,7 @@ export default class StringCondition {
     }
     check(input: any): boolean {
         if (typeof input !== 'string') {
-            throw 'input must be string'
+            return false
         }
         if (this.all) {
             for (const childCondition of this.all) {

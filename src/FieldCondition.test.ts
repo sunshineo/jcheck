@@ -1,4 +1,4 @@
-import FieldCondition from "./FieldCondition"
+import { FieldCondition } from "./FieldCondition"
 
 describe ('FieldCondition', () => {
     describe('constructor', () => {
@@ -38,14 +38,14 @@ describe ('FieldCondition', () => {
         })
     })
     describe('check function', () => {
-        test('input not object should throw', () => {
+        test('input not object return false', () => {
             const cond = new FieldCondition({
                 fieldName: "a",
                 fieldValue: {
                     allowedType: 'null'
                 }
             })
-            expect(() => {cond.check(0)}).toThrow()
+            expect(cond.check(0)).toBe(false)
         })
     })
 })

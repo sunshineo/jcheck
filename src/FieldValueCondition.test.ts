@@ -1,4 +1,4 @@
-import FieldValueCondition from "./FieldValueCondition"
+import { FieldValueCondition } from "./FieldValueCondition"
 
 describe ('FieldValueCondition', () => {
     describe('constructor', () => {

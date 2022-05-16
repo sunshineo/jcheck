@@ -1,4 +1,4 @@
-import BooleanCondition from "./BooleanCondition"
+import { BooleanCondition } from "./BooleanCondition"
 
 describe ('BooleanCondition', () => {
     describe('constructor', () => {
@@ -18,17 +18,17 @@ describe ('BooleanCondition', () => {
     })
     
     describe('check function', () => {
-        test('throw if input not boolean', () => {
+        test('not boolean return false', () => {
             const cond = new BooleanCondition({eq: true})
-            expect(() => {cond.check('abc')}).toThrow()
+            expect(cond.check('abc')).toBe(false)
         })
-        test('return true if equal', () => {
+        test('equal return true', () => {
             const cond1 = new BooleanCondition({eq: true})
             expect(cond1.check(true)).toBe(true)
             const cond2 = new BooleanCondition({eq: false})
             expect(cond2.check(false)).toBe(true)
         })
-        test('return false if not equal', () => {
+        test('not equal return false', () => {
             const cond1 = new BooleanCondition({eq: true})
             expect(cond1.check(false)).toBe(false)
             const cond2 = new BooleanCondition({eq: false})
