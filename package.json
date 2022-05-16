@@ -1,23 +1,30 @@
 {
   "name": "@sunshineo/jcheck",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library to check if JSON satisfy condition defined in another JSON",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "prepare" : "npm run build",
-    "prepublishOnly" : "npm test",
-    "version" : "git add -A src",
-    "postversion" : "git push && git push --tags"
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "author": "sunshineo",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sunshineo/jcheck"
   },
-  "keywords": ["JSON", "check", "schema", "validation", "condition", "requirement"],
+  "keywords": [
+    "JSON",
+    "check",
+    "schema",
+    "validation",
+    "condition",
+    "requirement"
+  ],
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.5.1",
