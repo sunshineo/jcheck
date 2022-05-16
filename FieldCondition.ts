@@ -106,5 +106,6 @@ export default class FieldCondition {
         if (this.not) {
             return !this.not.check(fieldValue)
         }
+        throw 'FieldConditon does not contain anything. Constructor should have thrown but did not.'
     }
 }
