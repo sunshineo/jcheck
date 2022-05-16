@@ -1,4 +1,4 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 
 export class DateCondition {
     all?: DateCondition[]
@@ -9,50 +9,50 @@ export class DateCondition {
     after?: Date
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
 
         let oneConditionSpecified: boolean = false
         const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, before, after'
-        const allArray: any = input['all']
-        if (allArray) {
+        if ('all' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (!Array.isArray(allArray)) {
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
                 throw '"all" must be an array'
             }
-            if (allArray.length === 0) {
+            if (allValue.length === 0) {
                 throw '"all" array cannot be empty'
             }
             this.all = []
-            for(const cond of allArray) {
+            for(const cond of allValue) {
                 this.all.push(new DateCondition(cond))
             }
             oneConditionSpecified = true
         }
         
-        const anyArray: any = input['any']
-        if (anyArray) {
+        if ('any' in input) {
+            const anyValue: any = input['any']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (!Array.isArray(anyArray)) {
+            if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
-            if (anyArray.length === 0) {
+            if (anyValue.length === 0) {
                 throw '"any" array cannot be empty'
             }
             this.any = []
-            for(const cond of anyArray) {
+            for(const cond of anyValue) {
                 this.any.push(new DateCondition(cond))
             }
             oneConditionSpecified = true
         }
 
-        const notValue: any = input['not']
-        if (notValue) {
+        if ('not' in input) {
+            const notValue: any = input['not']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }

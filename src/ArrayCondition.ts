@@ -1,7 +1,7 @@
 import { FieldValueCondition } from "./FieldValueCondition"
 import { FilterArrayCondition } from "./FilterArrayCondition"
 import { NumberCondition } from "./NumberCondition"
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 
 export class ArrayCondition {
     all?: ArrayCondition[]
@@ -14,49 +14,49 @@ export class ArrayCondition {
     filterArray?: FilterArrayCondition
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
         const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, size, hasElement, hasNoElement, filterArray'
-        const allArray: any = input['all']
-        if (allArray) {
+        if ('all' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(allArray)) {
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
                 throw '"all" must be an array'
             }
-            if (allArray.length === 0) {
+            if (allValue.length === 0) {
                 throw '"all" array cannot be empty'
             }
             this.all = []
-            for(const cond of allArray) {
+            for(const cond of allValue) {
                 this.all.push(new ArrayCondition(cond))
             }
+            oneConditionSpecified = true
         }
         
-        const anyArray: any = input['any']
-        if (anyArray) {
+        if ('any' in input) {
+            const anyValue: any = input['any']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(anyArray)) {
+            if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
-            if (anyArray.length === 0) {
+            if (anyValue.length === 0) {
                 throw '"any" array cannot be empty'
             }
             this.any = []
-            for(const cond of anyArray) {
+            for(const cond of anyValue) {
                 this.any.push(new ArrayCondition(cond))
             }
+            oneConditionSpecified = true
         }
 
-        const notValue: any = input['not']
-        if (notValue) {
+        if ('not' in input) {
+            const notValue: any = input['not']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -64,8 +64,8 @@ export class ArrayCondition {
             oneConditionSpecified = true
         }
 
-        const sizeValue: any = input['size']
-        if (sizeValue) {
+        if ('sizeValue' in input) {
+            const sizeValue: any = input['size']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -73,8 +73,8 @@ export class ArrayCondition {
             oneConditionSpecified = true
         }
 
-        const hasElementValue: any = input['hasElement']
-        if (hasElementValue) {
+        if ('hasElement' in input) {
+            const hasElementValue: any = input['hasElement']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -82,8 +82,8 @@ export class ArrayCondition {
             oneConditionSpecified = true
         }
 
-        const hasNoElementValue: any = input['hasNoElement']
-        if (hasNoElementValue) {
+        if ('hasNoElement' in input) {
+            const hasNoElementValue: any = input['hasNoElement']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -91,8 +91,8 @@ export class ArrayCondition {
             oneConditionSpecified = true
         }
 
-        const filterArrayValue: any = input['filterArray']
-        if (filterArrayValue) {
+        if ('filterArray' in input) {
+            const filterArrayValue: any = input['filterArray']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
@@ -105,7 +105,7 @@ export class ArrayCondition {
         }
     }
     check(input: any): boolean {
-        if (!Array.isArray(input)) {
+        if (jsontype(input) !== 'array') {
             return false
         }
         if (this.all) {
