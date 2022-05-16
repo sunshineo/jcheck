@@ -1,6 +1,6 @@
 {
   "name": "@sunshineo/jcheck",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A library to check if JSON satisfy condition defined in another JSON",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
