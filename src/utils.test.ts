@@ -1,5 +1,9 @@
 import { jsontype } from "./utils"
 
+it('undefined', () => {
+    expect(jsontype(undefined)).toEqual('undefined')
+})
+
 it('null', () => {
     expect(jsontype(null)).toEqual('null')
 })

@@ -1,4 +1,7 @@
 export function jsontype(input: any) {
+    if (input === undefined) {
+        return 'undefined'
+    }
     if (input === null) {
         return 'null'
     }
