@@ -1,30 +1,24 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 
-it('null fails', () => {
-    expect(objectNotArrayNotNull(null)).toEqual(false)
+it('null', () => {
+    expect(jsontype(null)).toEqual('null')
 })
-
-it('boolean fails', () => {
-    expect(objectNotArrayNotNull(true)).toEqual(false)
-    expect(objectNotArrayNotNull(false)).toEqual(false)
+it('boolean', () => {
+    expect(jsontype(true)).toEqual('boolean')
+    expect(jsontype(false)).toEqual('boolean')
 })
-
-it('number fails', () => {
-    expect(objectNotArrayNotNull(5)).toEqual(false)
+it('number', () => {
+    expect(jsontype(0)).toEqual('number')
+    expect(jsontype(1)).toEqual('number')
 })
-
-it('string fails', () => {
-    expect(objectNotArrayNotNull('abc')).toEqual(false)
+it('string', () => {
+    expect(jsontype('')).toEqual('string')
+    expect(jsontype('a')).toEqual('string')
 })
-
-it('array fails', () => {
-    expect(objectNotArrayNotNull([])).toEqual(false)
-    expect(objectNotArrayNotNull([1,2,3])).toEqual(false)
-    expect(objectNotArrayNotNull(['a','b'])).toEqual(false)
+it('array', () => {
+    expect(jsontype([])).toEqual('array')
+    expect(jsontype([{}])).toEqual('array')
 })
-
-it('object success', () => {
-    expect(objectNotArrayNotNull({})).toEqual(true)
-    expect(objectNotArrayNotNull({a:'b'})).toEqual(true)
-    
+it('object', () => {
+    expect(jsontype({})).toEqual('object')
 })
