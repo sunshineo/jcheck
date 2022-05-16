@@ -1,4 +1,4 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 import { NumberCondition } from "./NumberCondition"
 
 export class StringCondition {
@@ -15,60 +15,60 @@ export class StringCondition {
     regex?: RegExp
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
 
         let oneConditionSpecified: boolean = false
         const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, lengthCondition, eq, ne, startsWith, endWith, regex'
-        const allArray: any = input['all']
-        if (allArray) {
+        if ('all' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(allArray)) {
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
                 throw '"all" must be an array'
             }
-            if (allArray.length === 0) {
+            if (allValue.length === 0) {
                 throw '"all" array cannot be empty'
             }
             this.all = []
-            for(const cond of allArray) {
+            for(const cond of allValue) {
                 this.all.push(new StringCondition(cond))
             }
+            oneConditionSpecified = true
         }
         
-        const anyArray: any = input['any']
-        if (anyArray) {
+        if ('any' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(anyArray)) {
+            const anyValue: any = input['any']
+            if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
-            if (anyArray.length === 0) {
+            if (anyValue.length === 0) {
                 throw '"any" array cannot be empty'
             }
             this.any = []
-            for(const cond of anyArray) {
+            for(const cond of anyValue) {
                 this.any.push(new StringCondition(cond))
             }
+            oneConditionSpecified = true
         }
 
-        const notValue: any = input['not']
-        if (notValue) {
+        if ('not' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const notValue: any = input['not']
             this.not = new StringCondition(notValue)
             oneConditionSpecified = true
         }
 
         const caseInsensitiveValue = input['caseInsensitive']
         if (caseInsensitiveValue) {
-            if (typeof caseInsensitiveValue !== 'boolean') {
+            if (jsontype(caseInsensitiveValue) !== 'boolean') {
                 throw 'caseInsensitive must be a boolean'
             }
             this.caseInsensitive = caseInsensitiveValue
@@ -83,12 +83,12 @@ export class StringCondition {
             oneConditionSpecified = true
         }
 
-        const eqValue = input['eq']
-        if (eqValue) {
+        if ('eq' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof eqValue !== 'string') {
+            const eqValue = input['eq']
+            if (jsontype(eqValue) !== 'string') {
                 throw 'eq must be a string'
             }
             this.eq = eqValue
@@ -97,12 +97,12 @@ export class StringCondition {
             }
             oneConditionSpecified = true
         }
-        const neValue = input['ne']
-        if (neValue) {
+        if ('ne' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof neValue !== 'string') {
+            const neValue = input['ne']
+            if (jsontype(neValue) !== 'string') {
                 throw 'ne must be a string'
             }
             this.ne = neValue
@@ -111,12 +111,12 @@ export class StringCondition {
             }
             oneConditionSpecified = true
         }
-        const startsWithValue = input['startsWith']
-        if (startsWithValue) {
+        if ('startsWith' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof startsWithValue !== 'string') {
+            const startsWithValue = input['startsWith']
+            if (jsontype(startsWithValue) !== 'string') {
                 throw 'startsWith must be a string'
             }
             this.startsWith = startsWithValue
@@ -125,12 +125,12 @@ export class StringCondition {
             }
             oneConditionSpecified = true
         }
-        const endsWithValue = input['endsWith']
-        if (endsWithValue) {
+        if ('endsWith' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof endsWithValue !== 'string') {
+            const endsWithValue = input['endsWith']
+            if (jsontype(endsWithValue) !== 'string') {
                 throw 'endsWith must be a string'
             }
             this.endsWith = endsWithValue
@@ -139,12 +139,12 @@ export class StringCondition {
             }
             oneConditionSpecified = true
         }
-        const regexValue = input['regex']
-        if (regexValue) {
+        if ('regex' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof regexValue !== 'string') {
+            const regexValue = input['regex']
+            if (jsontype(regexValue) !== 'string') {
                 throw 'regex must be a string'
             }
             try {
@@ -159,7 +159,7 @@ export class StringCondition {
         }
     }
     check(input: any): boolean {
-        if (typeof input !== 'string') {
+        if (jsontype(input) !== 'string') {
             return false
         }
         if (this.all) {

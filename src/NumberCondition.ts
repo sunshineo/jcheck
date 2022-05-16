@@ -1,4 +1,4 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 
 export class NumberCondition {
     all?: NumberCondition[]
@@ -13,122 +13,122 @@ export class NumberCondition {
     lte?: number
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
 
         let oneConditionSpecified: boolean = false
         const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, eq, gt, gte, lt, lte'
-        const allArray: any = input['all']
-        if (allArray) {
+        if ('all' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (!Array.isArray(allArray)) {
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
                 throw '"all" must be an array'
             }
-            if (allArray.length === 0) {
+            if (allValue.length === 0) {
                 throw '"all" array cannot be empty'
             }
             this.all = []
-            for(const cond of allArray) {
+            for(const cond of allValue) {
                 this.all.push(new NumberCondition(cond))
             }
             oneConditionSpecified = true
         }
         
-        const anyArray: any = input['any']
-        if (anyArray) {
+        if ('any' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (!Array.isArray(anyArray)) {
+            const anyValue: any = input['any']
+            if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
-            if (anyArray.length === 0) {
+            if (anyValue.length === 0) {
                 throw '"any" array cannot be empty'
             }
             this.any = []
-            for(const cond of anyArray) {
+            for(const cond of anyValue) {
                 this.any.push(new NumberCondition(cond))
             }
             oneConditionSpecified = true
         }
 
-        const notValue: any = input['not']
-        if (notValue) {
+        if ('not' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const notValue: any = input['not']
             this.not = new NumberCondition(notValue)
             oneConditionSpecified = true
         }
 
-        const eqValue = input['eq']
-        if (eqValue !== undefined) {
+        if ('eq' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof eqValue !== 'number') {
+            const eqValue = input['eq']
+            if (jsontype(eqValue) !== 'number') {
                 throw 'eq must be a Number'
             }
             this.eq = eqValue
             oneConditionSpecified = true
         }
-        const neValue = input['ne']
-        if (neValue !== undefined) {
+        if ('ne' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof neValue !== 'number') {
+            const neValue = input['ne']
+            if (jsontype(neValue) !== 'number') {
                 throw 'ne must be a Number'
             }
             this.ne = neValue
             oneConditionSpecified = true
         }
 
-        const gtValue = input['gt']
-        if (gtValue !== undefined) {
+        if ('gt' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof gtValue !== 'number') {
+            const gtValue = input['gt']
+            if (jsontype(gtValue) !== 'number') {
                 throw 'gt must be a Number'
             }
             this.gt = gtValue
             oneConditionSpecified = true
         }
 
-        const gteValue = input['gte']
-        if (gteValue !== undefined) {
+        if ('gte' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof gteValue !== 'number') {
+            const gteValue = input['gte']
+            if (jsontype(gteValue) !== 'number') {
                 throw 'gte must be a Number'
             }
             this.gte = gteValue
             oneConditionSpecified = true
         }
 
-        const ltValue = input['lt']
-        if (ltValue !== undefined) {
+        if ('lt' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof ltValue !== 'number') {
+            const ltValue = input['lt']
+            if (jsontype(ltValue) !== 'number') {
                 throw 'lt must be a Number'
             }
             this.lt = ltValue
             oneConditionSpecified = true
         }
 
-        const lteValue = input['lte']
-        if (lteValue !== undefined) {
+        if ('lte' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            if (typeof lteValue !== 'number') {
+            const lteValue = input['lte']
+            if (jsontype(lteValue) !== 'number') {
                 throw 'lte must be a Number'
             }
             this.lte = lteValue
@@ -140,7 +140,7 @@ export class NumberCondition {
         }
     }
     check(input: any): boolean {
-        if (typeof input !== 'number') {
+        if (jsontype(input) !== 'number') {
             return false
         }
         if (this.all) {

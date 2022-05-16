@@ -15,24 +15,25 @@ export class BooleanCondition {
                 throw oneAndOnlyOneMsg
             }
             const eqValue = input['eq']
-            if (jsontype(input) !== 'boolean') {
+            if (jsontype(eqValue) !== 'boolean') {
                 throw 'eq must be either true or false'
             }
             this.eq = eqValue
             oneConditionSpecified = true
         }
+
         if ('ne' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
             const neValue = input['ne']
-            if (jsontype(input) !== 'boolean') {
+            if (jsontype(neValue) !== 'boolean') {
                 throw 'ne must be either true or false'
             }
             this.ne = neValue
             oneConditionSpecified = true
         }
-        if (!oneAndOnlyOneMsg) {
+        if (!oneConditionSpecified) {
             throw oneAndOnlyOneMsg
         }
     }
@@ -40,11 +41,11 @@ export class BooleanCondition {
         if (jsontype(input) !== 'boolean') {
             return false
         }
-        if (this.eq) {
+        if (this.eq !== undefined) {
             return input === this.eq
         }
-        if (this.ne) {
-            return input !== this.eq
+        if (this.ne !== undefined) {
+            return input !== this.ne
         }
         throw 'BooleanCondition does not contain anything. Constructor should have thrown but did not.'
     }

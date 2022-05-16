@@ -1,4 +1,4 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 
 import { StringCondition } from "./StringCondition"
 import { NumberCondition } from "./NumberCondition"
@@ -19,7 +19,7 @@ export class FieldValueCondition {
     dateCondition?: DateCondition
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
 
@@ -83,7 +83,7 @@ export class FieldValueCondition {
             return input === null
         }
         if (this.allowedType === 'boolean') {
-            if (typeof input !== 'boolean') {
+            if (jsontype(input) !== 'boolean') {
                 return false
             }
             if (!this.booleanCondition) {
@@ -92,7 +92,7 @@ export class FieldValueCondition {
             return this.booleanCondition.check(input)
         }
         if (this.allowedType === 'string') {
-            if (typeof input !== 'string') {
+            if (jsontype(input) !== 'string') {
                 return false
             }
             if (!this.stringCondition) {
@@ -102,7 +102,7 @@ export class FieldValueCondition {
             return this.stringCondition.check(input)
         }
         if (this.allowedType === 'number') {
-            if (typeof input !== 'number') {
+            if (jsontype(input) !== 'number') {
                 return false
             }
             if (!this.numberCondition) {
@@ -111,7 +111,7 @@ export class FieldValueCondition {
             return this.numberCondition.check(input)
         }
         if (this.allowedType === 'array') {
-            if (!Array.isArray(input)) {
+            if (jsontype(input) !== 'array') {
                 return false
             }
             if (!this.arrayCondition) {
@@ -120,7 +120,7 @@ export class FieldValueCondition {
             return this.arrayCondition.check(input)
         }
         if (this.allowedType === 'object') {
-            if (!objectNotArrayNotNull(input)) {
+            if (jsontype(input) !== 'object') {
                 return false
             }
             if (!this.objectCondition) {
@@ -130,7 +130,7 @@ export class FieldValueCondition {
             return this.objectCondition.check(input)
         }
         if (this.allowedType === 'date') {
-            if (typeof input !== 'string') {
+            if (jsontype(input) !== 'string') {
                 return false
             }
             const inputDate = new Date(input)
@@ -142,6 +142,6 @@ export class FieldValueCondition {
             }
             return this.dateCondition.check(inputDate)
         }
-        throw `Allowed type ${this.allowedType} is not one of the 6 valid JSON types: null, boolean, string, number, object, array. Constructor should have thrown but did not.`
+        throw `Allowed type ${this.allowedType} is not one of the 6 valid JSON types: null, boolean, string, number, object, array and not one of custom supported: date. Constructor should have thrown but did not.`
     }
 }

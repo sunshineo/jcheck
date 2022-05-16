@@ -1,4 +1,4 @@
-import { objectNotArrayNotNull } from "./utils"
+import { jsontype } from "./utils"
 import { FieldCondition } from "./FieldCondition"
 import { ArrayCondition } from "./ArrayCondition"
 
@@ -12,79 +12,79 @@ export class ObjectCondition {
     fieldValues?: ArrayCondition
 
     constructor(input: any) {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
         let oneConditionSpecified: boolean = false
         const oneAndOnlyOneMsg = 'Must have one and only one of: all, any, not, or field, fieldNames, fieldValues'
-        const allArray: any = input['all']
-        if (allArray) {
+        if ('all' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(allArray)) {
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
                 throw '"all" must be an array'
             }
-            if (allArray.length === 0) {
+            if (allValue.length === 0) {
                 throw '"all" array cannot be empty'
             }
             this.all = []
-            for(const cond of allArray) {
+            for(const cond of allValue) {
                 this.all.push(new ObjectCondition(cond))
             }
+            oneConditionSpecified = true
         }
         
-        const anyArray: any = input['any']
-        if (anyArray) {
+        if ('any' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
-            oneConditionSpecified = true
-            if (!Array.isArray(anyArray)) {
+            const anyValue: any = input['any']
+            if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
-            if (anyArray.length === 0) {
+            if (anyValue.length === 0) {
                 throw '"any" array cannot be empty'
             }
             this.any = []
-            for(const cond of anyArray) {
+            for(const cond of anyValue) {
                 this.any.push(new ObjectCondition(cond))
             }
-        }
-
-        const notValue: any = input['not']
-        if (notValue) {
-            if (oneConditionSpecified) {
-                throw oneAndOnlyOneMsg
-            }
             oneConditionSpecified = true
-            this.not = new ObjectCondition(notValue)
         }
 
-        const fieldValue: any = input['field']
-        if (fieldValue) {
+        if ('not' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const notValue: any = input['not']
+            this.not = new ObjectCondition(notValue)
+            oneConditionSpecified = true
+        }
+
+        if ('field' in input) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+            const fieldValue: any = input['field']
             oneConditionSpecified = true
             this.field = new FieldCondition(fieldValue)
         }
 
-        const fieldNamesValue: any = input['fieldNames']
-        if (fieldNamesValue) {
+        if ('fieldNames' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const fieldNamesValue: any = input['fieldNames']
             oneConditionSpecified = true
             this.fieldNames = new ArrayCondition(fieldNamesValue)
         }
 
-        const fieldValuesValue: any = input['fieldValues']
-        if (fieldValuesValue) {
+        if ('fieldValues' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const fieldValuesValue: any = input['fieldValues']
             oneConditionSpecified = true
             this.fieldValues = new ArrayCondition(fieldValuesValue)
         }
@@ -95,7 +95,7 @@ export class ObjectCondition {
     }
 
     check(input: any): boolean {
-        if (!objectNotArrayNotNull(input)) {
+        if (jsontype(input) !== 'object') {
             return false
         }
         if (this.all) {

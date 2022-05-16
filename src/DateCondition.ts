@@ -34,10 +34,10 @@ export class DateCondition {
         }
         
         if ('any' in input) {
-            const anyValue: any = input['any']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const anyValue: any = input['any']
             if (jsontype(anyValue) !== 'array') {
                 throw '"any" must be an array'
             }
@@ -52,19 +52,19 @@ export class DateCondition {
         }
 
         if ('not' in input) {
-            const notValue: any = input['not']
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const notValue: any = input['not']
             this.not = new DateCondition(notValue)
             oneConditionSpecified = true
         }
 
-        const beforeValue = input['before']
-        if (beforeValue !== undefined) {
+        if ('before' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const beforeValue = input['before']
             if (typeof beforeValue !== 'string') {
                 throw 'before must be a string'
             }
@@ -74,11 +74,11 @@ export class DateCondition {
             }
             oneConditionSpecified = true
         }
-        const afterValue = input['after']
-        if (afterValue !== undefined) {
+        if ('after' in input) {
             if (oneConditionSpecified) {
                 throw oneAndOnlyOneMsg
             }
+            const afterValue = input['after']
             if (typeof afterValue !== 'string') {
                 throw 'after must be a string'
             }
