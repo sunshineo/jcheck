@@ -7,7 +7,7 @@ import { ObjectCondition } from "./ObjectCondition"
 import { BooleanCondition } from "./BooleanCondition"
 import { DateCondition } from "./DateCondition"
 
-const allowedTypes = ["null", "boolean", "string", "number", "object", "array", "date"]
+const allowedTypes = ["undefined", "null", "boolean", "string", "number", "object", "array", "date"]
 
 export class FieldValueCondition {
     allowedType: string
@@ -79,6 +79,9 @@ export class FieldValueCondition {
     }
 
     check(input: any): boolean {
+        if (this.allowedType === 'undefined') {
+            return input === undefined
+        }
         if (this.allowedType === 'null') {
             return input === null
         }

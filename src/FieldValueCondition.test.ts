@@ -82,12 +82,38 @@ describe ('FieldValueCondition', () => {
         })
     })
     describe('check function', () => {
+        describe('undefined condition', () => {
+            test('return true for undefined', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'undefined'
+                })
+                expect(cond.check(undefined)).toBe(true)
+            })
+            test('return false for null', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'undefined'
+                })
+                expect(cond.check(null)).toBe(false)
+            })
+            test('return false for not undefined', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'undefined'
+                })
+                expect(cond.check('not-undefined')).toBe(false)
+            })
+        })
         describe('null condition', () => {
             test('return true for null', () => {
                 const cond = new FieldValueCondition({
                     allowedType: 'null'
                 })
                 expect(cond.check(null)).toBe(true)
+            })
+            test('return false for undefined', () => {
+                const cond = new FieldValueCondition({
+                    allowedType: 'null'
+                })
+                expect(cond.check(undefined)).toBe(false)
             })
             test('return false for not null', () => {
                 const cond = new FieldValueCondition({
