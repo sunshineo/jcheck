@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "npm run build; jest",
     "prepare": "npm run build",
     "prepublishOnly": "npm test",
     "version": "git add -A src",
