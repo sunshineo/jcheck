@@ -10,7 +10,7 @@ import { DateCondition } from "./DateCondition"
 const isTypes = ["undefined", "null", "boolean", "string", "number", "object", "array", "date"]
 
 export class FieldValueCondition {
-    isType: string
+    isType?: string
     booleanCondition?: BooleanCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition
@@ -18,67 +18,144 @@ export class FieldValueCondition {
     arrayCondition?: ArrayCondition
     dateCondition?: DateCondition
 
+    all?: FieldValueCondition[]
+    any?: FieldValueCondition[]
+    not?: FieldValueCondition
+
     constructor(input: any) {
         if (jsontype(input) !== 'object') {
             throw 'input must be an object not array and not null'
         }
 
-        const isTypeValue = input['isType']
-        if (typeof isTypeValue !== 'string' || !isTypes.includes(isTypeValue)) {
-            throw 'Must specify isType as a string. Valid values are one of the 6 valid JSON types: null, boolean, string, number, object, array'
-        }
-        this.isType = isTypeValue
-
-        const booleanCoditionValue: any = input['booleanCondition']
-        if (booleanCoditionValue) {
-            if (this.isType !== 'boolean') {
-                throw 'Cannot specify booleanCondition when the isType is not boolean'
+        let oneConditionSpecified: boolean = false
+        const oneAndOnlyOneMsg = 'Must have one and only one of: fieldValue, all, any, not'
+        if ('all' in input) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
             }
-            this.booleanCondition = new BooleanCondition(booleanCoditionValue)
-        }
-
-        const stringCoditionValue: any = input['stringCondition']
-        if (stringCoditionValue) {
-            if (this.isType !== 'string') {
-                throw 'Cannot specify stringCondition when the isType is not string'
+            const allValue: any = input['all']
+            if (jsontype(allValue) !== 'array') {
+                throw '"all" must be an array'
             }
-            this.stringCondition = new StringCondition(stringCoditionValue)
-        }
-
-        const numberCoditionValue: any = input['numberCondition']
-        if (numberCoditionValue) {
-            if (this.isType !== 'number') {
-                throw 'Cannot specify numberCondition when the isType is not number'    
+            if (allValue.length === 0) {
+                throw '"all" array cannot be empty'
             }
-            this.numberCondition = new NumberCondition(numberCoditionValue)
-        }
-
-        const objectCoditionValue: any = input['objectCondition']
-        if (objectCoditionValue) {
-            if (this.isType !== 'object') {
-                throw 'Cannot specify objectCondition when the isType is not object'    
+            this.all = []
+            for(const cond of allValue) {
+                this.all.push(new FieldValueCondition(cond))
             }
-            this.objectCondition = new ObjectCondition(objectCoditionValue)
+            oneConditionSpecified = true
         }
-
-        const arrayCoditionValue: any = input['arrayCondition']
-        if (arrayCoditionValue) {
-            if (this.isType !== 'array') {
-                throw 'Cannot specify arrayCondition when the isType is not array'    
+        
+        if ('any' in input) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
             }
-            this.arrayCondition = new ArrayCondition(arrayCoditionValue)
+            const anyValue: any = input['any']
+            if (jsontype(anyValue) !== 'array') {
+                throw '"any" must be an array'
+            }
+            if (anyValue.length === 0) {
+                throw '"any" array cannot be empty'
+            }
+            this.any = []
+            for(const cond of anyValue) {
+                this.any.push(new FieldValueCondition(cond))
+            }
+            oneConditionSpecified = true
         }
 
-        const dateCoditionValue: any = input['dateCondition']
-        if (arrayCoditionValue) {
-            if (this.isType !== 'date') {
-                throw 'Cannot specify dateCondition when the isType is not date'
+        if ('not' in input) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
             }
-            this.dateCondition = new DateCondition(dateCoditionValue)
+            const notValue: any = input['not']
+            this.not = new FieldValueCondition(notValue)
+            oneConditionSpecified = true
+        }
+
+        if ('isType' in input) {
+            if (oneConditionSpecified) {
+                throw oneAndOnlyOneMsg
+            }
+
+            const isTypeValue = input['isType']
+            if (typeof isTypeValue !== 'string' || !isTypes.includes(isTypeValue)) {
+                throw 'Must specify isType as a string. Valid values are one of the 6 valid JSON types: null, boolean, string, number, object, array'
+            }
+            this.isType = isTypeValue
+
+            const booleanCoditionValue: any = input['booleanCondition']
+            if (booleanCoditionValue) {
+                if (this.isType !== 'boolean') {
+                    throw 'Cannot specify booleanCondition when the isType is not boolean'
+                }
+                this.booleanCondition = new BooleanCondition(booleanCoditionValue)
+            }
+
+            const stringCoditionValue: any = input['stringCondition']
+            if (stringCoditionValue) {
+                if (this.isType !== 'string') {
+                    throw 'Cannot specify stringCondition when the isType is not string'
+                }
+                this.stringCondition = new StringCondition(stringCoditionValue)
+            }
+
+            const numberCoditionValue: any = input['numberCondition']
+            if (numberCoditionValue) {
+                if (this.isType !== 'number') {
+                    throw 'Cannot specify numberCondition when the isType is not number'    
+                }
+                this.numberCondition = new NumberCondition(numberCoditionValue)
+            }
+
+            const objectCoditionValue: any = input['objectCondition']
+            if (objectCoditionValue) {
+                if (this.isType !== 'object') {
+                    throw 'Cannot specify objectCondition when the isType is not object'    
+                }
+                this.objectCondition = new ObjectCondition(objectCoditionValue)
+            }
+
+            const arrayCoditionValue: any = input['arrayCondition']
+            if (arrayCoditionValue) {
+                if (this.isType !== 'array') {
+                    throw 'Cannot specify arrayCondition when the isType is not array'    
+                }
+                this.arrayCondition = new ArrayCondition(arrayCoditionValue)
+            }
+
+            const dateCoditionValue: any = input['dateCondition']
+            if (arrayCoditionValue) {
+                if (this.isType !== 'date') {
+                    throw 'Cannot specify dateCondition when the isType is not date'
+                }
+                this.dateCondition = new DateCondition(dateCoditionValue)
+            }
         }
     }
 
     check(input: any): boolean {
+        if (this.all) {
+            for (const childCondition of this.all) {
+                if (!childCondition.check(input)) {
+                    return false
+                }
+            }
+            return true
+        }
+        if (this.any) {
+            for (const childCondition of this.any) {
+                if (childCondition.check(input)) {
+                    return true
+                }
+            }
+            return false
+        }
+        if (this.not) {
+            return !this.not.check(input)
+        }
+
         if (this.isType === 'undefined') {
             return input === undefined
         }

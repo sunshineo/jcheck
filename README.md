@@ -47,6 +47,19 @@ const condition3JSON = {
     ]
 }
 
+// Another way to do the above is
+const condition3JSON = {
+  field: {
+    fieldName: 'field1',
+    fieldValue: {
+      or: [
+        { isType: 'undefined' },
+        { isType: 'null' },
+      ]
+    }
+  }
+}
+
 // Field2 is string 'a'
 const condition4JSON = {
     field: {
@@ -59,7 +72,7 @@ const condition4JSON = {
         }
     }
 }
-// Field2 is string 'a' or 'b'
+// Field2 is string 'a' or starts with b/B
 const condition5JSON = {
     field: {
         fieldName: 'field2',
@@ -68,7 +81,7 @@ const condition5JSON = {
             stringCondition: {
                 any: [
                     { eq: 'a' },
-                    { eq: 'b' }
+                    { regex: '^b', caseInsensitive: true }
                 ]
             }
         }
@@ -101,6 +114,22 @@ const condition7JSON = {
         condition5JSON,
         condition6JSON
     ]
+}
+
+// Date is not JSON type but JS type so special support
+const condition7JSON = {
+    field: {
+      fieldName: 'time',
+      any: [
+        {
+          all: [
+            {isType: 'date', before: '2022'},
+            {isType: 'date', after: '2022'},
+          ]
+        },
+        { isType: 'undefined' }
+      ]
+    }
 }
 
 // nums is an array of numbers or empty
@@ -179,20 +208,18 @@ Class constructor input allows one and only one of the following
 Class constructor input has the following
 * fieldName: string
   * Required. The name of the field
-
-One and only one of
 * fieldValue?: FieldValueCondition
-  * The required condition for the value. See FieldValueCondition for details
+  * Required. The required condition for the value. See FieldValueCondition for details
+
+### FieldValueCondition
+Class constructor input has one of the following
 * all?: FieldValueCondition[]
   * An array of child FieldValueCondition. Only returns true if all of the child conditions returns true.
 * any?: FieldValueCondition[]
   * An array of child FieldValueCondition. Returns true if any of the child conditions returns true.
 * not?: FieldValueCondition
   * A child FieldValueCondition. Returns the opposite of the child condition result
-
-### FieldValueCondition
-Class constructor input has the following
-* isType: string
+* isType?: string
   * Required. One of the following string values:
     * "undefined": The field does not exist in the object
     * "null": The field exists in the object and value is null
@@ -203,7 +230,7 @@ Class constructor input has the following
     * "object": The field is a object. Can specify additional requirement using objectCondition below
     * "date": The field is a string representing a date time. Can specify additional requirement using dateCondition below
 
-One and only one of the following, matching the isType specified above
+If isType specified, must have one and only one of the following, matching the isType specified above
 * booleanCondition?: BooleanCondition
 * stringCondition?: StringCondition
 * numberCondition?: NumberCondition

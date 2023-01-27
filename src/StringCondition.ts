@@ -148,7 +148,12 @@ export class StringCondition {
                 throw 'regex must be a string'
             }
             try {
-                this.regex = new RegExp(regexValue)
+                if (this.caseInsensitive) {
+                    this.regex = new RegExp(regexValue, 'i')
+                }
+                else {
+                    this.regex = new RegExp(regexValue)
+                }
             } catch(e) {
                 throw 'Provided string is not a valid regex'
             }
