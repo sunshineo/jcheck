@@ -37,7 +37,7 @@ describe ('ObjectCondition', () => {
                 field: {
                     fieldName: "a",
                     fieldValue: {
-                        allowedType: 'null'
+                        isType: 'null'
                     }
                 }
             })

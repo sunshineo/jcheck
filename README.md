@@ -21,7 +21,7 @@ const condition1JSON = {
     field: {
         fieldName: 'field1',
         fieldValue: {
-            allowedType: 'undefined',
+            isType: 'undefined',
         }
     }
 }
@@ -34,7 +34,7 @@ const condition2JSON = {
     field: {
         fieldName: 'field1',
         fieldValue: {
-            allowedType: 'null',
+            isType: 'null',
         }
     }
 }
@@ -52,7 +52,7 @@ const condition4JSON = {
     field: {
         fieldName: 'field2',
         fieldValue: {
-            allowedType: 'string',
+            isType: 'string',
             stringCondition: {
                 eq: 'a'
             }
@@ -64,7 +64,7 @@ const condition5JSON = {
     field: {
         fieldName: 'field2',
         fieldValue: {
-            allowedType: 'string',
+            isType: 'string',
             stringCondition: {
                 any: [
                     { eq: 'a' },
@@ -80,7 +80,7 @@ const condition6JSON = {
     field: {
         fieldName: 'field3',
         fieldValue: {
-            allowedType: 'number',
+            isType: 'number',
             numberCondition: {
                 all: [
                     { gt: 0 },
@@ -102,7 +102,62 @@ const condition7JSON = {
         condition6JSON
     ]
 }
-// See below for more advanced features
+
+// nums is an array of numbers or empty
+const condition8JSON = {
+  field: {
+    fieldName: 'nums',
+    fieldValue: {
+      isType: 'array',
+      arrayCondition: {
+        filterArray: {
+          elementFilter: {
+            not: {
+              isType: 'number',
+            }
+          },
+          passFilterCount: {
+            eq: 0,
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// Any lineItem sku equals SKU1 or SKU2
+const condition8JSON = {
+  field: {
+    fieldName: 'lineItem',
+    fieldValue: {
+      isType: 'array',
+      arrayCondition: {
+        filterArray: {
+          elementFilter: {
+            isType: 'object',
+            objectCondition: {
+              field: 'sku',
+              fieldValue: {
+                isType: 'string',
+                stringCondition: {
+                  any:[
+                    { eq: 'SKU1' },
+                    { eq: 'SKU2' },
+                  ]
+                }
+              }
+            }
+          },
+          passFilterCount: {
+            gt: 0
+          }
+        }
+      }
+    }
+  }
+}
+
 ```
 
 ## References
@@ -137,7 +192,7 @@ One and only one of
 
 ### FieldValueCondition
 Class constructor input has the following
-* allowedType: string
+* isType: string
   * Required. One of the following string values:
     * "undefined": The field does not exist in the object
     * "null": The field exists in the object and value is null
@@ -148,7 +203,7 @@ Class constructor input has the following
     * "object": The field is a object. Can specify additional requirement using objectCondition below
     * "date": The field is a string representing a date time. Can specify additional requirement using dateCondition below
 
-One and only one of the following, matching the allowedType specified above
+One and only one of the following, matching the isType specified above
 * booleanCondition?: BooleanCondition
 * stringCondition?: StringCondition
 * numberCondition?: NumberCondition

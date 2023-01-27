@@ -112,7 +112,7 @@ describe ('ArrayCondition', () => {
         describe('hasElement', () => {
             const cond = new ArrayCondition({
                 hasElement: {
-                    allowedType: 'string',
+                    isType: 'string',
                     stringCondition: {
                         eq: 'abc'
                     }
@@ -128,7 +128,7 @@ describe ('ArrayCondition', () => {
         describe('hasNoElement', () => {
             const cond = new ArrayCondition({
                 hasNoElement: {
-                    allowedType: 'string',
+                    isType: 'string',
                     stringCondition: {
                         eq: 'abc'
                     }

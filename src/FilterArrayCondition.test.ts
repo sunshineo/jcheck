@@ -10,7 +10,7 @@ describe ('FilterArrayCondition', () => {
                 test('does not exists throw', () => {
                     expect(() => {
                         new FilterArrayCondition({
-                            elementFilter: { allowedType: 'null' }
+                            elementFilter: { isType: 'null' }
                         })
                     }).toThrow()
                 })
@@ -18,7 +18,7 @@ describe ('FilterArrayCondition', () => {
                     expect(() => {
                         new FilterArrayCondition({
                             passFilterCount: 'not-object',
-                            elementFilter: { allowedType: 'null' }
+                            elementFilter: { isType: 'null' }
                         })
                     }).toThrow()
                 })
@@ -49,7 +49,7 @@ describe ('FilterArrayCondition', () => {
         test('input not array return false', () => {
             const cond = new FilterArrayCondition({
                 passFilterCount: { eq: 0 },
-                elementFilter: { allowedType: 'null' }
+                elementFilter: { isType: 'null' }
             })
             expect(cond.check('not-array')).toBe(false)
         })

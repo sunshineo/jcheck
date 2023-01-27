@@ -11,70 +11,70 @@ describe ('FieldValueCondition', () => {
             })
         })
 
-        describe('allowedType', () => {
+        describe('isType', () => {
             test('not string throw', () => {
-                expect(() => {new FieldValueCondition({ allowedType: 0 })}).toThrow()
+                expect(() => {new FieldValueCondition({ isType: 0 })}).toThrow()
             })
             test('not valid string throw', () => {
-                expect(() => {new FieldValueCondition({ allowedType: 'not-valid' })}).toThrow()
+                expect(() => {new FieldValueCondition({ isType: 'not-valid' })}).toThrow()
             })
         })
 
         describe('booleanCondition', () => {
-            test('if boolean is not allowedType throw', () => {
+            test('if boolean is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         booleanCondition: ''
                     })
                 })
             })
         })
         describe('numberCondition', () => {
-            test('if number is not allowedType throw', () => {
+            test('if number is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         numberCondition: ''
                     })
                 })
             })
         })
         describe('stringCondition', () => {
-            test('if string is not allowedType throw', () => {
+            test('if string is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         stringCondition: ''
                     })
                 })
             })
         })
         describe('objectCondition', () => {
-            test('if object is not allowedType throw', () => {
+            test('if object is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         objectCondition: ''
                     })
                 })
             })
         })
         describe('arrayCondition', () => {
-            test('if array is not allowedType throw', () => {
+            test('if array is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         arrayCondition: ''
                     })
                 })
             })
         })
         describe('dateCondition', () => {
-            test('if date is not allowedType throw', () => {
+            test('if date is not isType throw', () => {
                 expect(() => {
                     new FieldValueCondition({
-                        allowedType: 'null',
+                        isType: 'null',
                         dateCondition: ''
                     })
                 })
@@ -85,19 +85,19 @@ describe ('FieldValueCondition', () => {
         describe('undefined condition', () => {
             test('return true for undefined', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'undefined'
+                    isType: 'undefined'
                 })
                 expect(cond.check(undefined)).toBe(true)
             })
             test('return false for null', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'undefined'
+                    isType: 'undefined'
                 })
                 expect(cond.check(null)).toBe(false)
             })
             test('return false for not undefined', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'undefined'
+                    isType: 'undefined'
                 })
                 expect(cond.check('not-undefined')).toBe(false)
             })
@@ -105,19 +105,19 @@ describe ('FieldValueCondition', () => {
         describe('null condition', () => {
             test('return true for null', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'null'
+                    isType: 'null'
                 })
                 expect(cond.check(null)).toBe(true)
             })
             test('return false for undefined', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'null'
+                    isType: 'null'
                 })
                 expect(cond.check(undefined)).toBe(false)
             })
             test('return false for not null', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'null'
+                    isType: 'null'
                 })
                 expect(cond.check('not-null')).toBe(false)
             })
@@ -125,13 +125,13 @@ describe ('FieldValueCondition', () => {
         describe('boolean condition', () => {
             test('return true for boolean', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'boolean'
+                    isType: 'boolean'
                 })
                 expect(cond.check(true)).toBe(true)
             })
             test('return false for not boolean', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'boolean'
+                    isType: 'boolean'
                 })
                 expect(cond.check('not-boolean')).toBe(false)
             })
@@ -139,13 +139,13 @@ describe ('FieldValueCondition', () => {
         describe('number condition', () => {
             test('return true for number', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'number'
+                    isType: 'number'
                 })
                 expect(cond.check(0)).toBe(true)
             })
             test('return false for not number', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'number'
+                    isType: 'number'
                 })
                 expect(cond.check('not-number')).toBe(false)
             })
@@ -153,13 +153,13 @@ describe ('FieldValueCondition', () => {
         describe('string condition', () => {
             test('return true for string', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'string'
+                    isType: 'string'
                 })
                 expect(cond.check('str')).toBe(true)
             })
             test('return false for not string', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'string'
+                    isType: 'string'
                 })
                 expect(cond.check(0)).toBe(false)
             })
@@ -167,13 +167,13 @@ describe ('FieldValueCondition', () => {
         describe('array condition', () => {
             test('return true for array', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'array'
+                    isType: 'array'
                 })
                 expect(cond.check([])).toBe(true)
             })
             test('return false for not array', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'array'
+                    isType: 'array'
                 })
                 expect(cond.check('not-array')).toBe(false)
             })
@@ -181,13 +181,13 @@ describe ('FieldValueCondition', () => {
         describe('object condition', () => {
             test('return true for object', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'object'
+                    isType: 'object'
                 })
                 expect(cond.check({})).toBe(true)
             })
             test('return false for not object', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'object'
+                    isType: 'object'
                 })
                 expect(cond.check('not-object')).toBe(false)
             })
@@ -195,13 +195,13 @@ describe ('FieldValueCondition', () => {
         describe('date condition', () => {
             test('return true for date', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'date'
+                    isType: 'date'
                 })
                 expect(cond.check('2022-05-15T07:45:07.172Z')).toBe(true)
             })
             test('return false for not date', () => {
                 const cond = new FieldValueCondition({
-                    allowedType: 'date'
+                    isType: 'date'
                 })
                 expect(cond.check('not-date')).toBe(false)
             })

@@ -7,10 +7,10 @@ import { ObjectCondition } from "./ObjectCondition"
 import { BooleanCondition } from "./BooleanCondition"
 import { DateCondition } from "./DateCondition"
 
-const allowedTypes = ["undefined", "null", "boolean", "string", "number", "object", "array", "date"]
+const isTypes = ["undefined", "null", "boolean", "string", "number", "object", "array", "date"]
 
 export class FieldValueCondition {
-    allowedType: string
+    isType: string
     booleanCondition?: BooleanCondition
     stringCondition?: StringCondition
     numberCondition?: NumberCondition
@@ -23,69 +23,69 @@ export class FieldValueCondition {
             throw 'input must be an object not array and not null'
         }
 
-        const allowedTypeValue = input['allowedType']
-        if (typeof allowedTypeValue !== 'string' || !allowedTypes.includes(allowedTypeValue)) {
-            throw 'Must specify allowedType as a string. Valid values are one of the 6 valid JSON types: null, boolean, string, number, object, array'
+        const isTypeValue = input['isType']
+        if (typeof isTypeValue !== 'string' || !isTypes.includes(isTypeValue)) {
+            throw 'Must specify isType as a string. Valid values are one of the 6 valid JSON types: null, boolean, string, number, object, array'
         }
-        this.allowedType = allowedTypeValue
+        this.isType = isTypeValue
 
         const booleanCoditionValue: any = input['booleanCondition']
         if (booleanCoditionValue) {
-            if (this.allowedType !== 'boolean') {
-                throw 'Cannot specify booleanCondition when the allowedType is not boolean'
+            if (this.isType !== 'boolean') {
+                throw 'Cannot specify booleanCondition when the isType is not boolean'
             }
             this.booleanCondition = new BooleanCondition(booleanCoditionValue)
         }
 
         const stringCoditionValue: any = input['stringCondition']
         if (stringCoditionValue) {
-            if (this.allowedType !== 'string') {
-                throw 'Cannot specify stringCondition when the allowedType is not string'
+            if (this.isType !== 'string') {
+                throw 'Cannot specify stringCondition when the isType is not string'
             }
             this.stringCondition = new StringCondition(stringCoditionValue)
         }
 
         const numberCoditionValue: any = input['numberCondition']
         if (numberCoditionValue) {
-            if (this.allowedType !== 'number') {
-                throw 'Cannot specify numberCondition when the allowedType is not number'    
+            if (this.isType !== 'number') {
+                throw 'Cannot specify numberCondition when the isType is not number'    
             }
             this.numberCondition = new NumberCondition(numberCoditionValue)
         }
 
         const objectCoditionValue: any = input['objectCondition']
         if (objectCoditionValue) {
-            if (this.allowedType !== 'object') {
-                throw 'Cannot specify objectCondition when the allowedType is not object'    
+            if (this.isType !== 'object') {
+                throw 'Cannot specify objectCondition when the isType is not object'    
             }
             this.objectCondition = new ObjectCondition(objectCoditionValue)
         }
 
         const arrayCoditionValue: any = input['arrayCondition']
         if (arrayCoditionValue) {
-            if (this.allowedType !== 'array') {
-                throw 'Cannot specify arrayCondition when the allowedType is not array'    
+            if (this.isType !== 'array') {
+                throw 'Cannot specify arrayCondition when the isType is not array'    
             }
             this.arrayCondition = new ArrayCondition(arrayCoditionValue)
         }
 
         const dateCoditionValue: any = input['dateCondition']
         if (arrayCoditionValue) {
-            if (this.allowedType !== 'date') {
-                throw 'Cannot specify dateCondition when the allowedType is not date'
+            if (this.isType !== 'date') {
+                throw 'Cannot specify dateCondition when the isType is not date'
             }
             this.dateCondition = new DateCondition(dateCoditionValue)
         }
     }
 
     check(input: any): boolean {
-        if (this.allowedType === 'undefined') {
+        if (this.isType === 'undefined') {
             return input === undefined
         }
-        if (this.allowedType === 'null') {
+        if (this.isType === 'null') {
             return input === null
         }
-        if (this.allowedType === 'boolean') {
+        if (this.isType === 'boolean') {
             if (jsontype(input) !== 'boolean') {
                 return false
             }
@@ -94,7 +94,7 @@ export class FieldValueCondition {
             }
             return this.booleanCondition.check(input)
         }
-        if (this.allowedType === 'string') {
+        if (this.isType === 'string') {
             if (jsontype(input) !== 'string') {
                 return false
             }
@@ -104,7 +104,7 @@ export class FieldValueCondition {
             // has required condition on the string
             return this.stringCondition.check(input)
         }
-        if (this.allowedType === 'number') {
+        if (this.isType === 'number') {
             if (jsontype(input) !== 'number') {
                 return false
             }
@@ -113,7 +113,7 @@ export class FieldValueCondition {
             }
             return this.numberCondition.check(input)
         }
-        if (this.allowedType === 'array') {
+        if (this.isType === 'array') {
             if (jsontype(input) !== 'array') {
                 return false
             }
@@ -122,7 +122,7 @@ export class FieldValueCondition {
             }
             return this.arrayCondition.check(input)
         }
-        if (this.allowedType === 'object') {
+        if (this.isType === 'object') {
             if (jsontype(input) !== 'object') {
                 return false
             }
@@ -132,7 +132,7 @@ export class FieldValueCondition {
             // has required condition on the object
             return this.objectCondition.check(input)
         }
-        if (this.allowedType === 'date') {
+        if (this.isType === 'date') {
             if (jsontype(input) !== 'string') {
                 return false
             }
@@ -145,6 +145,6 @@ export class FieldValueCondition {
             }
             return this.dateCondition.check(inputDate)
         }
-        throw `Allowed type ${this.allowedType} is not one of the 6 valid JSON types: null, boolean, string, number, object, array and not one of custom supported: date. Constructor should have thrown but did not.`
+        throw `Allowed type ${this.isType} is not one of the 6 valid JSON types: null, boolean, string, number, object, array and not one of custom supported: date. Constructor should have thrown but did not.`
     }
 }

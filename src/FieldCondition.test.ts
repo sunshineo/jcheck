@@ -42,7 +42,7 @@ describe ('FieldCondition', () => {
             const cond = new FieldCondition({
                 fieldName: "a",
                 fieldValue: {
-                    allowedType: 'null'
+                    isType: 'null'
                 }
             })
             expect(cond.check(0)).toBe(false)
